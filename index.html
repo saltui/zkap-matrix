@@ -42,6 +42,26 @@ h1{font-size:30px;color:var(--text);margin-bottom:6px;display:flex;align-items:c
 h1 .badge{font-size:13px;background:var(--primary);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;letter-spacing:0}
 .sub{color:var(--text-3);font-size:15px;margin-bottom:16px;font-weight:500}
 
+.section-nav{
+  display:flex;gap:4px;
+  background:var(--surface);
+  border-radius:16px;
+  padding:6px;
+  box-shadow:var(--shadow);
+  margin:14px 0 12px;
+  max-width:500px
+}
+.section-btn{
+  flex:1;background:transparent;color:var(--text-3);
+  border:none;padding:13px 20px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  border-radius:10px;font-family:inherit;
+  transition:all .15s;letter-spacing:-0.01em
+}
+.section-btn:hover{color:var(--text);background:var(--surface-hover)}
+.section-btn.active{background:var(--primary);color:#fff}
+.section-btn.active:hover{background:#2068d8;color:#fff}
+
 .macro-banner{
   display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;
   background:var(--surface);border-radius:16px;padding:10px;
@@ -415,6 +435,10 @@ a.src-card:hover::after{opacity:1;color:var(--primary)}
 <header>
 <h1>ZKAP 코인 데이터 매트릭스 <span class="badge">v4</span></h1>
 <p class="sub">10종 × 130여개 지표 — 실제 API 자동 수집 가능 영역만 (수작업·정성평가 제외) | Mock 데이터 | 2026-04-20</p>
+<nav class="section-nav" id="sectionNav">
+  <button class="section-btn active" data-section="matrix">📊 데이터 매트릭스</button>
+  <button class="section-btn" data-section="mockup">📱 앱 목업</button>
+</nav>
 <div class="macro-banner">
   <div class="macro-card"><span class="lbl">Fear &amp; Greed</span><span class="val warn">62</span><span class="sub">탐욕 (Greed)</span></div>
   <div class="macro-card"><span class="lbl">BTC Dominance</span><span class="val">58.2%</span><span class="sub down">−0.4% (7d)</span></div>
@@ -1128,7 +1152,6 @@ const DESC = {
 // 탭 정의. 각 탭 = { key, label, cols:[...] }
 // cols: { key:데이터키, label:컬럼명, fmt:포맷터함수, w:최소너비 }
 const TABS = [
-  {key:'mockup', label:'📱 앱 목업', cols:[]},
   {key:'overview', label:'개요', cols:[
     {key:'rank', label:'#', fmt:v=>'#'+v},
     {key:'mc', label:'시총', fmt:fmt.bigUSD},
@@ -1334,7 +1357,8 @@ const TABS = [
 // 렌더링 + 인터랙션
 // ============================================================================
 let state = {
-  tab:'mockup',
+  section:'matrix',
+  tab:'overview',
   sector:'all',
   sortCol:null,
   sortDir:'desc',
@@ -1574,19 +1598,21 @@ function render(){
   renderTabs();
   const tab = TABS.find(t=>t.key===state.tab);
 
-  // 목업 탭 처리
+  // 섹션 스위치 (매트릭스 ↔ 목업)
   const $tw = document.querySelector('.tw');
   const $meta = document.querySelector('.meta-row');
   const $macro = document.querySelector('.macro-banner');
   const $filter = document.querySelector('.filter-bar');
+  const $tabs = document.getElementById('tabs');
   const $mockup = document.getElementById('mockupView');
   const setDisp = (el, val) => { if (el) el.style.display = val; };
 
-  if(state.tab==='mockup'){
+  if(state.section==='mockup'){
     setDisp($tw, 'none');
     setDisp($meta, 'none');
     setDisp($macro, 'none');
     setDisp($filter, 'none');
+    setDisp($tabs, 'none');
     setDisp($mockup, 'block');
     renderMockup();
     return;
@@ -1595,6 +1621,7 @@ function render(){
   setDisp($meta, 'flex');
   setDisp($macro, 'grid');
   setDisp($filter, 'flex');
+  setDisp($tabs, 'flex');
   setDisp($mockup, 'none');
 
   const visible = getVisible();
@@ -1646,6 +1673,17 @@ function render(){
   document.getElementById('visibleCount').textContent =
     `${visible.length}/${COINS.length}개 코인 · ${tab.cols.length}개 지표 · ${tab.label}`;
 }
+
+// 섹션 스위치 (매트릭스 ↔ 목업)
+document.querySelectorAll('.section-btn').forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll('.section-btn').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    state.section=b.dataset.section;
+    render();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+});
 
 // 필터 버튼
 document.querySelectorAll('.chip').forEach(c=>{
