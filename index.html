@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZKAP 코인 데이터 매트릭스 v4</title>
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#F2F4F6;
+  --surface:#FFFFFF;
+  --surface-hover:#F9FAFB;
+  --border:#E5E8EB;
+  --border-soft:#F2F4F6;
+  --text:#191F28;
+  --text-2:#4E5968;
+  --text-3:#8B95A1;
+  --text-4:#B0B8C1;
+  --primary:#3182F6;
+  --primary-soft:#E8F3FF;
+  --up:#00A378;
+  --up-soft:rgba(0,163,120,.10);
+  --down:#F04452;
+  --down-soft:rgba(240,68,82,.10);
+  --warn:#FF9500;
+  --warn-soft:rgba(255,149,0,.12);
+  --shadow:0 1px 3px rgba(0,0,0,.04), 0 0 1px rgba(0,0,0,.04);
+}
+body{
+  font-family:'Pretendard Variable','Pretendard',-apple-system,BlinkMacSystemFont,'Apple SD Gothic Neo','Noto Sans KR','Segoe UI',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  padding:28px 24px;
+  font-size:15px;
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  letter-spacing:-0.01em;
+}
+header{margin-bottom:20px}
+h1{font-size:30px;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-0.03em}
+h1 .badge{font-size:13px;background:var(--primary);color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;letter-spacing:0}
+.sub{color:var(--text-3);font-size:15px;margin-bottom:16px;font-weight:500}
+
+.macro-banner{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;
+  background:var(--surface);border-radius:16px;padding:10px;
+  box-shadow:var(--shadow);margin:14px 0 12px
+}
+.macro-card{
+  background:var(--surface-hover);border-radius:12px;padding:12px 14px;
+  display:flex;flex-direction:column;gap:3px
+}
+.macro-card .lbl{font-size:11px;color:var(--text-3);font-weight:700;letter-spacing:0}
+.macro-card .val{font-size:19px;font-weight:800;color:var(--text);letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
+.macro-card .sub{font-size:11px;color:var(--text-3);font-weight:600}
+.macro-card .sub.up{color:var(--up)}
+.macro-card .sub.down{color:var(--down)}
+.macro-card .val.warn{color:var(--warn)}
+.macro-card .val.up{color:var(--up)}
+.macro-card .val.down{color:var(--down)}
+
+.filter-bar{
+  background:var(--surface);
+  border-radius:16px;
+  padding:16px 20px;
+  box-shadow:var(--shadow);
+  display:flex;align-items:center;gap:8px;margin:14px 0 16px;flex-wrap:wrap
+}
+.filter-bar .label{color:var(--text-3);font-size:13px;margin-right:2px;font-weight:700}
+.chip{
+  background:var(--border-soft);
+  color:var(--text-2);
+  border:none;
+  padding:9px 16px;
+  border-radius:999px;
+  font-size:14px;
+  cursor:pointer;
+  transition:all .15s;
+  font-weight:600;
+  font-family:inherit
+}
+.chip:hover{background:var(--border);color:var(--text)}
+.chip.active{background:var(--primary);color:#fff}
+
+.tabs{
+  background:var(--surface);
+  border-radius:16px;
+  padding:6px;
+  box-shadow:var(--shadow);
+  display:flex;gap:2px;margin:14px 0 12px;overflow-x:auto
+}
+.tabs::-webkit-scrollbar{height:0}
+.tab{
+  background:transparent;
+  color:var(--text-3);
+  border:none;
+  padding:11px 16px;
+  font-size:14px;
+  cursor:pointer;
+  border-radius:10px;
+  white-space:nowrap;
+  font-weight:600;
+  transition:all .15s;
+  font-family:inherit;
+  display:flex;align-items:center;gap:6px
+}
+.tab:hover{color:var(--text);background:var(--surface-hover)}
+.tab.active{background:var(--border-soft);color:var(--text);font-weight:700}
+.tab .count{font-size:11px;color:var(--text-4);font-weight:700;background:var(--border-soft);padding:2px 7px;border-radius:6px}
+.tab.active .count{background:var(--primary-soft);color:var(--primary)}
+
+.tw{
+  background:var(--surface);
+  border-radius:16px;
+  box-shadow:var(--shadow);
+  overflow-x:auto;
+  max-height:calc(100vh - 330px)
+}
+.tw::-webkit-scrollbar{height:10px;width:10px}
+.tw::-webkit-scrollbar-thumb{background:var(--border);border-radius:10px}
+.tw::-webkit-scrollbar-track{background:transparent}
+
+table{border-collapse:collapse;font-size:14px;white-space:nowrap;width:max-content;min-width:100%}
+th,td{padding:14px 14px;text-align:right}
+th{
+  background:var(--surface-hover);
+  color:var(--text-3);
+  font-weight:700;
+  font-size:12px;
+  cursor:pointer;
+  user-select:none;
+  position:sticky;
+  top:0;
+  z-index:2;
+  text-transform:none;
+  border-bottom:1px solid var(--border);
+  letter-spacing:0
+}
+th:hover{background:var(--border-soft);color:var(--text-2)}
+th .arrow{font-size:10px;margin-left:4px;color:var(--text-4);opacity:.6}
+th.sorted{color:var(--primary);background:var(--primary-soft)}
+th.sorted .arrow{color:var(--primary);opacity:1}
+td{
+  border-bottom:1px solid var(--border-soft);
+  color:var(--text);
+  font-weight:500;
+  font-variant-numeric:tabular-nums
+}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--surface-hover)}
+
+.sc{position:sticky;z-index:3;background:var(--surface)}
+th.sc{background:var(--surface-hover);z-index:5}
+tr:hover .sc{background:var(--surface-hover)}
+.s0{left:0;width:64px;min-width:64px;text-align:center;padding:10px 8px!important}
+.s1{left:64px;width:148px;min-width:148px;text-align:left!important;padding:10px 14px!important}
+.sc.s1{border-right:1px solid var(--border)}
+
+.cn{font-weight:700;color:var(--text);font-size:15px;line-height:1.25}
+.coin-meta{color:var(--text-3);font-size:12px;font-weight:600;margin-top:3px;letter-spacing:0}
+.coin-meta .sym{color:var(--primary);margin-right:6px;font-weight:700}
+
+#tooltip{
+  position:fixed;background:#191F28;color:#fff;
+  padding:11px 14px;border-radius:10px;
+  font-size:13px;font-weight:500;
+  max-width:320px;
+  z-index:1000;
+  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  line-height:1.55;pointer-events:none;
+  opacity:0;transition:opacity .12s;
+  letter-spacing:-0.01em;
+  text-transform:none;text-align:left;
+  font-family:inherit;white-space:normal;
+  left:-9999px;top:-9999px
+}
+#tooltip.show{opacity:1}
+#tooltip::before{
+  content:'';position:absolute;
+  bottom:100%;left:var(--arrow-x,50%);transform:translateX(-50%);
+  border:6px solid transparent;
+  border-bottom-color:#191F28
+}
+
+.tier{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:5px 12px;border-radius:999px;
+  font-size:12px;font-weight:700;min-width:40px
+}
+.tier.w{background:var(--up-soft);color:var(--up)}
+.tier.n{background:var(--warn-soft);color:var(--warn)}
+.tier.x{background:var(--down-soft);color:var(--down)}
+.tier.no{background:var(--border-soft);color:var(--text-3)}
+
+.rank{
+  display:inline-flex;align-items:center;justify-content:center;
+  padding:5px 10px;border-radius:999px;
+  font-size:12px;font-weight:700;min-width:44px;
+  background:var(--border-soft);color:var(--text-2);
+  font-variant-numeric:tabular-nums
+}
+.rank.top3{background:var(--primary);color:#fff}
+.rank.top10{background:var(--primary-soft);color:var(--primary)}
+
+.up{color:var(--up);font-weight:700}
+.down{color:var(--down);font-weight:700}
+.warn{color:var(--warn);font-weight:700}
+.neutral{color:var(--text-2);font-weight:600}
+.na{color:var(--text-4);font-size:14px}
+.txt{text-align:left;color:var(--text-2);font-size:13px;font-weight:500}
+.star{color:#FFB800;letter-spacing:2px;font-size:14px}
+
+.flag{
+  font-size:12px;padding:4px 12px;border-radius:999px;
+  font-weight:700;background:var(--border-soft);color:var(--text-3);
+  display:inline-flex;align-items:center;justify-content:center
+}
+.flag.yes{color:var(--up);background:var(--up-soft)}
+.flag.no{color:var(--down);background:var(--down-soft)}
+
+.footer{
+  background:var(--surface);
+  border-radius:16px;
+  padding:24px 28px;
+  box-shadow:var(--shadow);
+  margin-top:16px;
+  font-size:14px;
+  color:var(--text-2);
+  line-height:1.65
+}
+.footer>b{
+  color:var(--text);font-weight:700;font-size:17px;
+  display:block;margin-bottom:14px
+}
+.footer .src-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:10px;margin-top:12px
+}
+.footer .src-card{
+  background:var(--surface-hover);
+  padding:14px 16px;
+  border-radius:12px;
+  border:1px solid var(--border-soft);
+  font-size:13px;
+  color:var(--text-2);
+  line-height:1.55;
+  text-decoration:none;
+  display:block;
+  position:relative;
+  transition:all .15s
+}
+a.src-card:hover{
+  background:#fff;
+  border-color:var(--primary-soft);
+  transform:translateY(-1px);
+  box-shadow:0 4px 12px rgba(49,130,246,.1)
+}
+a.src-card:hover b{color:var(--primary)}
+a.src-card::after{
+  content:'↗';position:absolute;top:12px;right:14px;
+  color:var(--text-4);font-weight:700;font-size:14px;
+  opacity:0;transition:opacity .15s
+}
+a.src-card:hover::after{opacity:1;color:var(--primary)}
+.footer .src-card b{
+  color:var(--text);display:block;margin-bottom:4px;
+  font-size:14px;font-weight:700
+}
+.footer .src-card .tier-tag{
+  display:inline-block;padding:2px 8px;border-radius:6px;
+  font-size:11px;font-weight:700;margin-left:6px;vertical-align:middle
+}
+.footer .free{background:var(--up-soft);color:var(--up)}
+.footer .paid{background:var(--warn-soft);color:var(--warn)}
+.footer .principle{
+  background:var(--surface-hover);
+  padding:14px 16px;
+  border-radius:12px;
+  margin-top:12px;
+  font-size:13px;
+  line-height:1.6
+}
+.footer .principle b{color:var(--text);font-weight:700}
+
+.no-data{padding:60px 20px;text-align:center;color:var(--text-4);font-size:15px}
+.meta-row{
+  display:flex;justify-content:space-between;align-items:center;
+  margin:8px 4px 14px;font-size:13px;color:var(--text-3)
+}
+#visibleCount{font-weight:600}
+.legend{display:flex;gap:14px;align-items:center;font-size:12px;color:var(--text-3);font-weight:500}
+.legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+</style>
+</head>
+<body>
+<header>
+<h1>ZKAP 코인 데이터 매트릭스 <span class="badge">v4</span></h1>
+<p class="sub">10종 × 130여개 지표 — 실제 API 자동 수집 가능 영역만 (수작업·정성평가 제외) | Mock 데이터 | 2026-04-20</p>
+<div class="macro-banner">
+  <div class="macro-card"><span class="lbl">Fear &amp; Greed</span><span class="val warn">62</span><span class="sub">탐욕 (Greed)</span></div>
+  <div class="macro-card"><span class="lbl">BTC Dominance</span><span class="val">58.2%</span><span class="sub down">−0.4% (7d)</span></div>
+  <div class="macro-card"><span class="lbl">ETH Dominance</span><span class="val">10.1%</span><span class="sub down">−0.3%</span></div>
+  <div class="macro-card"><span class="lbl">Total MC</span><span class="val">$2.70T</span><span class="sub up">+1.8%</span></div>
+  <div class="macro-card"><span class="lbl">Stable MC</span><span class="val">$248B</span><span class="sub up">+0.6%</span></div>
+  <div class="macro-card"><span class="lbl">Altcoin Season</span><span class="val">42/100</span><span class="sub">BTC 시즌</span></div>
+</div>
+<div class="filter-bar">
+<span class="label">섹터</span>
+<button class="chip active" data-sector="all">전체</button>
+<button class="chip" data-sector="가치저장">가치저장</button>
+<button class="chip" data-sector="L1">L1</button>
+<button class="chip" data-sector="Oracle">Oracle</button>
+<button class="chip" data-sector="CEX토큰">CEX토큰</button>
+<button class="chip" data-sector="DeFi">DeFi</button>
+<button class="chip" data-sector="결제">결제</button>
+<button class="chip" data-sector="밈">밈</button>
+</div>
+</header>
+
+<nav class="tabs" id="tabs"></nav>
+<div class="meta-row">
+<div id="visibleCount"></div>
+<div class="legend">
+<span class="up">▲ 긍정</span>
+<span class="down">▼ 부정</span>
+<span class="warn">● 주의</span>
+<span class="na">— N/A</span>
+</div>
+</div>
+
+<div class="tw"><table id="dataTable"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+
+<div class="footer">
+<b>📊 데이터 소스 & 수집 가능성</b> — 지표별 실제 API 제공처. 🟢 무료 · 🟡 유료($)
+<div class="src-grid">
+<a class="src-card" href="https://www.coingecko.com/en/api" target="_blank" rel="noopener"><b>CoinGecko <span class="tier-tag free">무료</span></b>시총·가격·공급·거래량·소셜(Twitter·Reddit·Telegram)·Watchlist·개발자</a>
+<a class="src-card" href="https://defillama.com/docs/api" target="_blank" rel="noopener"><b>DeFiLlama <span class="tier-tag free">무료</span></b>TVL·Fees·Revenue·섹터별 집계·체인별 데이터·Stablecoin·Bridges</a>
+<a class="src-card" href="https://coinmetrics.io/community-network-data/" target="_blank" rel="noopener"><b>CoinMetrics Community <span class="tier-tag free">무료</span></b>활성주소·트랜잭션수·NVT·온체인 기초 (BTC/ETH/major)</a>
+<a class="src-card" href="https://docs.github.com/en/rest" target="_blank" rel="noopener"><b>GitHub API <span class="tier-tag free">무료</span></b>Stars·Commits·PR·Contributors·Full-time Devs (Electric Capital 방법론)</a>
+<a class="src-card" href="https://dune.com/" target="_blank" rel="noopener"><b>Dune Analytics <span class="tier-tag free">무료(쿼터)</span></b>커스텀 SQL — 고래·언락·HHI·지갑 분포·LTH/STH</a>
+<a class="src-card" href="https://flipsidecrypto.xyz/" target="_blank" rel="noopener"><b>Flipside Crypto <span class="tier-tag free">무료</span></b>무료 SQL (Dune 대안) — 지갑·스테이킹·DEX 흐름. 무료 쿼터 넉넉</a>
+<a class="src-card" href="https://www.artemis.xyz/" target="_blank" rel="noopener"><b>Artemis <span class="tier-tag free">무료 티어</span></b>크로스체인 DAU·Fee·MoM 비교 (섹터 상대 지표)</a>
+<a class="src-card" href="https://l2beat.com/" target="_blank" rel="noopener"><b>L2Beat <span class="tier-tag free">무료</span></b>L2별 TVL·탈중앙화 등급·시퀀서 수익·브릿지 비용 (L2 코인 분석 필수)</a>
+<a class="src-card" href="https://etherscan.io/apis" target="_blank" rel="noopener"><b>Etherscan Family <span class="tier-tag free">무료</span></b>체인별 블록 익스플로러 API (ETH·BSC·Polygon·Arbitrum·Base 등) — 온체인 원본</a>
+<a class="src-card" href="https://coinglass.com/" target="_blank" rel="noopener"><b>Coinglass <span class="tier-tag free">무료</span></b>Funding Rate·OI·L/S Ratio·청산 (파생 섹션 전체)</a>
+<a class="src-card" href="https://velodata.app/" target="_blank" rel="noopener"><b>Velo Data <span class="tier-tag free">무료</span></b>파생상품·옵션 데이터 (Put/Call·Max Pain·IV 곡선) — Deribit 대체</a>
+<a class="src-card" href="https://www.tradingview.com/" target="_blank" rel="noopener"><b>TradingView <span class="tier-tag free">무료</span></b>RSI·MACD·이평선·볼린저 — 기술적 지표 계산값</a>
+<a class="src-card" href="https://trends.google.com/" target="_blank" rel="noopener"><b>Google Trends <span class="tier-tag free">무료</span></b>검색 트렌드 지수 (0-100), 관심도 MoM</a>
+<a class="src-card" href="https://sosovalue.com/" target="_blank" rel="noopener"><b>SoSoValue <span class="tier-tag free">무료</span></b>ETF 순유입 · AUM (BTC/ETH ETF만 유효)</a>
+<a class="src-card" href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener"><b>Alternative.me <span class="tier-tag free">무료</span></b>Crypto Fear &amp; Greed Index — 시장 전체 심리 (0=극단공포 ~ 100=극단탐욕)</a>
+<a class="src-card" href="https://glassnode.com/" target="_blank" rel="noopener"><b>Glassnode <span class="tier-tag paid">$29~$799/mo</span></b>MVRV·SOPR·NVT Signal·HODL Waves·고래 분포 (BTC/ETH/SOL/major 커버)</a>
+<a class="src-card" href="https://cryptoquant.com/" target="_blank" rel="noopener"><b>CryptoQuant <span class="tier-tag paid">$29~$399/mo</span></b>거래소 순유입·Funding 심화·고래알림·스테이블 흐름</a>
+<a class="src-card" href="https://tokenterminal.com/" target="_blank" rel="noopener"><b>Token Terminal <span class="tier-tag paid">$149~/mo</span></b>P/S·P/E·P/F·활성사용자·매출 MoM (DeFiLlama 커버 70% + α)</a>
+<a class="src-card" href="https://www.nansen.ai/" target="_blank" rel="noopener"><b>Nansen <span class="tier-tag paid">$150~/mo</span></b>스마트머니 라벨링·지갑 추적·고래 매수매도</a>
+<a class="src-card" href="https://www.arkhamintelligence.com/" target="_blank" rel="noopener"><b>Arkham Intelligence <span class="tier-tag paid">무료 티어 + $</span></b>지갑 라벨링·기관·재단 지갑 추적 (Nansen 대체·보완)</a>
+<a class="src-card" href="https://www.intotheblock.com/" target="_blank" rel="noopener"><b>IntoTheBlock <span class="tier-tag paid">$100~/mo</span></b>온체인 + AI 시그널·In/Out of the Money·홀더 분석 통합</a>
+<a class="src-card" href="https://santiment.net/" target="_blank" rel="noopener"><b>Santiment <span class="tier-tag paid">$49~/mo</span></b>소셜 볼륨·센티먼트·개발 활동 통합</a>
+<a class="src-card" href="https://lunarcrush.com/" target="_blank" rel="noopener"><b>LunarCrush <span class="tier-tag paid">무료 티어 + $24~/mo</span></b>Galaxy Score·AltRank·소셜 통합 지표</a>
+<a class="src-card" href="https://token.unlocks.app/" target="_blank" rel="noopener"><b>Token Unlocks <span class="tier-tag paid">$49~/mo</span></b>언락 스케줄 전문 (90d/180d)·다음 언락 임팩트 시뮬레이션</a>
+<a class="src-card" href="https://cryptorank.io/" target="_blank" rel="noopener"><b>CryptoRank <span class="tier-tag paid">$49~/mo</span></b>펀딩 라운드·VC 투자 이력·토큰 상세·소장자 분포</a>
+<a class="src-card" href="https://messari.io/" target="_blank" rel="noopener"><b>Messari <span class="tier-tag paid">$29~$499/mo</span></b>펀더멘털 통합·리서치 리포트 (밸류에이션 심화)</a>
+</div>
+<div class="principle"><b>📝 N/A 처리 원칙</b> — 섹터 특성상 부적합한 지표는 "—"로 숨김 (예: BTC에 PSR, 결제 코인에 P/F). 실제 서비스에서도 "데이터 없음" 텍스트 대신 숨김 권장 (신뢰도 저하 방지).</div>
+<div class="principle"><b>🎯 설계 원칙</b> — 선별 전에 전수조사. 주식에서 쓰는 모든 지표 → 크립토 대응 가능 여부 확인 → Mock으로 "꽉 찬 그림" 검증 → 유의미한 부분집합 도출.</div>
+</div>
+
+<script>
+// ============================================================================
+// 코인 데이터 (10종) — Mock 데이터. 실제 API 연동 시 이 구조로 대체.
+// 2026-04-19 기준. 수치는 실제 관측치 또는 합리적 추정치.
+// ============================================================================
+const COINS = [
+  {
+    rank:1, symbol:'BTC', name:'Bitcoin', sector:'가치저장', moat:'Wide',
+    consensus:'PoW', launched:2009, survival:4, price:70700,
+    mc:1400e9, fdv:1400e9, vol24h:54e9,
+    // 시장동역학
+    vol30d:0.32, vol90d:0.45, betaBtc:1.00, betaEth:0.74,
+    corrBtc:1.00, corrSpx:0.42, mdd1y:-0.57, pos52w:0.48, turnover:0.039, sharpe:0.42,
+    // 온체인 밸류에이션
+    mvrv:1.8, mvrvZ:0.9, nvt:42, nvtSignal:38, sopr:1.02, realizedPrice:38200, puell:1.3, thermocap:42,
+    // 온체인 활동
+    daa:980000, newAddr:380000, txPerDay:520000, avgTx:65000, feePerAddr:3.37, feeMom:-0.12, daaMom:0.05,
+    // 홀더
+    top10:0.052, top100:0.138, hhi:320, lth:0.742, sth:0.258, hodler1y:0.68, cexHolding:0.118, cdd:2800000,
+    // 밸류에이션 (주식 대응)
+    psr:null, pf:null, pbr:294.77, revYield:null, eps:null, opMargin:null, roe:null, psrVsSector:null,
+    // 수익성/성장
+    rev30d:null, revAnnual:null, fees30d:3.3e6, feesAnnual:39.6e6, revMom:null, revQoq:null, feesMom:-0.15, tvlMom:0.02, stakeApy:null,
+    price30d:0.066, price1y:-0.097, athDist:-0.431,
+    // 공급/희석
+    circRatio:1.00, fdvMc:1.00, maxSupply:21e6, inflation:0.0085, stake:0, unlock90d:0.002, unlock180d:0.005, teamHold:0, burnCum:0, feePolicy:'없음',
+    // 파생
+    funding:0.00012, oi:38e9, oiMc:0.027, ls:1.08, perpBasis:0.085, iv:0.52,
+    // 거래소흐름
+    cexFlow7d:-450e6, cexFlow30d:-2.1e9, cexHoldMom:-0.018, stableInflow:8.2e9,
+    // ETF
+    etfFlow7d:1.2e9, etfCum:54e9, etfAumMc:0.039, kimchi:0.021,
+    // 개발
+    activeDevs:320, coreDevs:18, ftDevs:58, devMom:0.02, contributors:145, pr4w:42, stars:73000, commits4w:108,
+    // 소셜
+    xMom:0.08, reddit:6800000, redditMom:0.012, gtrends:48, gtrendsMom:0.04, news4w:3200, lunarcrush:82, telegram:null, watchlist:2400000, sentiment:0.822,
+    // 스마트머니
+    smartMoney7d:320e6, whale7d:880e6, whaleWallets:142,
+    // 기술적
+    rsi:48, macd:'+', ma200:-0.08, ma50:-0.03, bbp:0.38, atr:3400,
+    // Moat (정성)
+    moatNetwork:5, moatSwitch:3, moatScale:5, moatIntangible:5, moatCost:3,
+    // 규제/상장
+    secStatus:'Commodity', upbit:true, bithumb:true, globalExchanges:450, regRisk:'낮음'
+  },
+  {
+    rank:2, symbol:'ETH', name:'Ethereum', sector:'L1', moat:'Wide',
+    consensus:'PoS', launched:2015, survival:3, price:2260,
+    mc:272e9, fdv:272e9, vol24h:26.6e9,
+    vol30d:0.42, vol90d:0.58, betaBtc:1.28, betaEth:1.00,
+    corrBtc:0.84, corrSpx:0.38, mdd1y:-0.68, pos52w:0.32, turnover:0.098, sharpe:0.18,
+    mvrv:1.4, mvrvZ:0.3, nvt:58, nvtSignal:52, sopr:0.98, realizedPrice:1950, puell:null, thermocap:null,
+    daa:450000, newAddr:110000, txPerDay:1200000, avgTx:1200, feePerAddr:0.18, feeMom:-0.24, daaMom:-0.08,
+    top10:0.392, top100:0.58, hhi:1240, lth:0.62, sth:0.38, hodler1y:0.55, cexHolding:0.108, cdd:480000,
+    psr:12200, pf:1.04, pbr:4.95, revYield:0.0001, eps:0.1846, opMargin:0.193, roe:0.0004, psrVsSector:2.8,
+    rev30d:1.9e6, revAnnual:22.3e6, fees30d:9.6e6, feesAnnual:254000e6, revMom:0.581, revQoq:-0.496, feesMom:-0.42, tvlMom:-0.05, stakeApy:0.024,
+    price30d:0.135, price1y:0.429, athDist:-0.544,
+    circRatio:1.00, fdvMc:1.00, maxSupply:null, inflation:-0.0012, stake:0.284, unlock90d:0, unlock180d:0, teamHold:0, burnCum:4.5e6, feePolicy:'소각(EIP-1559)',
+    funding:0.008, oi:18e9, oiMc:0.066, ls:0.98, perpBasis:0.072, iv:0.68,
+    cexFlow7d:-180e6, cexFlow30d:-820e6, cexHoldMom:-0.022, stableInflow:3.8e9,
+    etfFlow7d:42e6, etfCum:1.8e9, etfAumMc:0.011, kimchi:0.018,
+    activeDevs:2800, coreDevs:142, ftDevs:520, devMom:0.04, contributors:890, pr4w:380, stars:44000, commits4w:41,
+    xMom:0.12, reddit:2900000, redditMom:0.004, gtrends:38, gtrendsMom:-0.02, news4w:2800, lunarcrush:75, telegram:null, watchlist:1900000, sentiment:0.835,
+    smartMoney7d:180e6, whale7d:420e6, whaleWallets:89,
+    rsi:42, macd:'-', ma200:-0.18, ma50:-0.08, bbp:0.28, atr:180,
+    moatNetwork:5, moatSwitch:5, moatScale:5, moatIntangible:4, moatCost:3,
+    secStatus:'Commodity(추정)', upbit:true, bithumb:true, globalExchanges:420, regRisk:'낮음'
+  },
+  {
+    rank:7, symbol:'SOL', name:'Solana', sector:'L1', moat:'Narrow',
+    consensus:'PoS+PoH', launched:2020, survival:2, price:83,
+    mc:48.5e9, fdv:48.5e9, vol24h:5.2e9,
+    vol30d:0.58, vol90d:0.72, betaBtc:1.62, betaEth:1.18,
+    corrBtc:0.72, corrSpx:0.32, mdd1y:-0.78, pos52w:0.18, turnover:0.107, sharpe:-0.28,
+    mvrv:0.9, mvrvZ:-0.4, nvt:72, nvtSignal:88, sopr:0.94, realizedPrice:92, puell:null, thermocap:null,
+    daa:1200000, newAddr:320000, txPerDay:42000000, avgTx:125, feePerAddr:0.015, feeMom:-0.38, daaMom:-0.12,
+    top10:0.62, top100:0.78, hhi:3800, lth:0.48, sth:0.52, hodler1y:0.32, cexHolding:0.082, cdd:180000,
+    psr:2235, pf:0.065, pbr:8.56, revYield:0.00045, eps:0.0379, opMargin:0.104, roe:0.0038, psrVsSector:0.5,
+    rev30d:1.8e6, revAnnual:21.7e6, fees30d:17.3e6, feesAnnual:207.5e6, revMom:-0.006, revQoq:-0.303, feesMom:-0.52, tvlMom:-0.18, stakeApy:0.055,
+    price30d:0.016, price1y:-0.223, athDist:-0.712,
+    circRatio:1.00, fdvMc:1.00, maxSupply:null, inflation:0.048, stake:0.662, unlock90d:0.008, unlock180d:0.016, teamHold:0.13, burnCum:0, feePolicy:'소각(50%)',
+    funding:0.004, oi:3.2e9, oiMc:0.066, ls:0.92, perpBasis:0.038, iv:0.82,
+    cexFlow7d:-52e6, cexFlow30d:-180e6, cexHoldMom:-0.01, stableInflow:680e6,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.024,
+    activeDevs:1100, coreDevs:68, ftDevs:210, devMom:0.08, contributors:380, pr4w:180, stars:11000, commits4w:171,
+    xMom:0.04, reddit:320000, redditMom:-0.008, gtrends:32, gtrendsMom:-0.08, news4w:1200, lunarcrush:68, telegram:3000, watchlist:1300000, sentiment:0.80,
+    smartMoney7d:-80e6, whale7d:-120e6, whaleWallets:-32,
+    rsi:38, macd:'-', ma200:-0.35, ma50:-0.12, bbp:0.22, atr:8.5,
+    moatNetwork:4, moatSwitch:3, moatScale:4, moatIntangible:3, moatCost:5,
+    secStatus:'소송중', upbit:true, bithumb:true, globalExchanges:380, regRisk:'중'
+  },
+  {
+    rank:8, symbol:'TRX', name:'TRON', sector:'L1', moat:'Narrow',
+    consensus:'DPoS', launched:2017, survival:3, price:0.316,
+    mc:30e9, fdv:30e9, vol24h:503e6,
+    vol30d:0.22, vol90d:0.28, betaBtc:0.52, betaEth:0.38,
+    corrBtc:0.48, corrSpx:0.18, mdd1y:-0.32, pos52w:0.72, turnover:0.017, sharpe:1.25,
+    mvrv:2.2, mvrvZ:1.4, nvt:32, nvtSignal:28, sopr:1.12, realizedPrice:0.144, puell:null, thermocap:null,
+    daa:2400000, newAddr:180000, txPerDay:8500000, avgTx:450, feePerAddr:0.012, feeMom:0.14, daaMom:0.08,
+    top10:0.48, top100:0.68, hhi:2100, lth:0.68, sth:0.32, hodler1y:0.58, cexHolding:0.072, cdd:320000,
+    psr:87, pf:86, pbr:6.10, revYield:0.012, eps:0.003649, opMargin:1.00, roe:0.0704, psrVsSector:0.02,
+    rev30d:28.8e6, revAnnual:345.8e6, fees30d:28.8e6, feesAnnual:351.4e6, revMom:0.14, revQoq:-0.107, feesMom:0.08, tvlMom:0.12, stakeApy:0.04,
+    price30d:0.097, price1y:0.359, athDist:-0.267,
+    circRatio:1.00, fdvMc:1.00, maxSupply:null, inflation:0, stake:0.48, unlock90d:0, unlock180d:0, teamHold:0.18, burnCum:14.2e9, feePolicy:'소각',
+    funding:0.002, oi:420e6, oiMc:0.014, ls:1.15, perpBasis:0.022, iv:0.38,
+    cexFlow7d:-8e6, cexFlow30d:-42e6, cexHoldMom:-0.004, stableInflow:1.2e9,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.012,
+    activeDevs:85, coreDevs:8, ftDevs:22, devMom:-0.02, contributors:28, pr4w:18, stars:4000, commits4w:19,
+    xMom:0.06, reddit:58000, redditMom:0.002, gtrends:18, gtrendsMom:0.02, news4w:420, lunarcrush:62, telegram:48000, watchlist:345000, sentiment:0.316,
+    smartMoney7d:22e6, whale7d:48e6, whaleWallets:18,
+    rsi:62, macd:'+', ma200:0.12, ma50:0.04, bbp:0.62, atr:0.018,
+    moatNetwork:5, moatSwitch:4, moatScale:3, moatIntangible:2, moatCost:5,
+    secStatus:'소송중(SEC)', upbit:true, bithumb:true, globalExchanges:280, regRisk:'중'
+  },
+  {
+    rank:14, symbol:'HYPE', name:'Hyperliquid', sector:'DeFi', moat:'Narrow',
+    consensus:'HyperBFT', launched:2023, survival:0, price:28,
+    mc:9.4e9, fdv:37.9e9, vol24h:342.5e6,
+    vol30d:0.78, vol90d:0.92, betaBtc:1.85, betaEth:1.42,
+    corrBtc:0.58, corrSpx:0.22, mdd1y:-0.42, pos52w:0.82, turnover:0.036, sharpe:2.18,
+    mvrv:null, mvrvZ:null, nvt:null, nvtSignal:null, sopr:null, realizedPrice:null, puell:null, thermocap:null,
+    daa:120000, newAddr:8500, txPerDay:420000, avgTx:2800, feePerAddr:1.68, feeMom:0.22, daaMom:0.38,
+    top10:0.42, top100:0.62, hhi:1800, lth:null, sth:null, hodler1y:null, cexHolding:0.02, cdd:null,
+    psr:14, pf:12.7, pbr:null, revYield:0.07, eps:2.76, opMargin:0.899, roe:null, psrVsSector:0.3,
+    rev30d:54.8e6, revAnnual:658e6, fees30d:61e6, feesAnnual:754.4e6, revMom:0.057, revQoq:-0.198, feesMom:0.08, tvlMom:0.28, stakeApy:null,
+    price30d:0.283, price1y:2.295, athDist:-0.336,
+    circRatio:0.248, fdvMc:4.04, maxSupply:1e9, inflation:0.18, stake:null, unlock90d:0.04, unlock180d:0.12, teamHold:0.23, burnCum:0.8e6, feePolicy:'바이백+소각',
+    funding:0.021, oi:1.8e9, oiMc:0.191, ls:1.22, perpBasis:0.18, iv:1.15,
+    cexFlow7d:null, cexFlow30d:null, cexHoldMom:null, stableInflow:null,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:null,
+    activeDevs:42, coreDevs:6, ftDevs:15, devMom:0.12, contributors:18, pr4w:28, stars:null, commits4w:null,
+    xMom:0.48, reddit:28000, redditMom:0.22, gtrends:62, gtrendsMom:0.32, news4w:850, lunarcrush:88, telegram:43000, watchlist:161000, sentiment:0.35,
+    smartMoney7d:120e6, whale7d:220e6, whaleWallets:58,
+    rsi:72, macd:'+', ma200:1.82, ma50:0.22, bbp:0.88, atr:3.8,
+    moatNetwork:3, moatSwitch:2, moatScale:5, moatIntangible:2, moatCost:4,
+    secStatus:'미분류', upbit:false, bithumb:false, globalExchanges:42, regRisk:'중'
+  },
+  {
+    rank:18, symbol:'LINK', name:'Chainlink', sector:'Oracle', moat:'Wide',
+    consensus:'-', launched:2017, survival:3, price:12,
+    mc:8e9, fdv:20e9, vol24h:420e6,
+    vol30d:0.48, vol90d:0.62, betaBtc:1.35, betaEth:1.08,
+    corrBtc:0.78, corrSpx:0.28, mdd1y:-0.58, pos52w:0.28, turnover:0.053, sharpe:-0.12,
+    mvrv:1.1, mvrvZ:0.2, nvt:null, nvtSignal:null, sopr:0.99, realizedPrice:10.9, puell:null, thermocap:null,
+    daa:58000, newAddr:4200, txPerDay:180000, avgTx:850, feePerAddr:0.42, feeMom:0.04, daaMom:-0.02,
+    top10:0.58, top100:0.72, hhi:2400, lth:0.52, sth:0.48, hodler1y:0.42, cexHolding:0.098, cdd:48000,
+    psr:110, pf:90, pbr:null, revYield:0.009, eps:0.108, opMargin:0.82, roe:null, psrVsSector:1.1,
+    rev30d:6.1e6, revAnnual:73.2e6, fees30d:7.4e6, feesAnnual:89.2e6, revMom:0.08, revQoq:-0.12, feesMom:0.04, tvlMom:null, stakeApy:0.046,
+    price30d:-0.08, price1y:-0.38, athDist:-0.82,
+    circRatio:0.68, fdvMc:1.47, maxSupply:1e9, inflation:0.02, stake:0.18, unlock90d:0.02, unlock180d:0.04, teamHold:0.35, burnCum:0, feePolicy:'없음',
+    funding:0.006, oi:380e6, oiMc:0.048, ls:1.02, perpBasis:0.042, iv:0.72,
+    cexFlow7d:-18e6, cexFlow30d:-42e6, cexHoldMom:-0.008, stableInflow:null,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.008,
+    activeDevs:180, coreDevs:22, ftDevs:48, devMom:0.02, contributors:85, pr4w:62, stars:4200, commits4w:85,
+    xMom:0.02, reddit:120000, redditMom:-0.004, gtrends:28, gtrendsMom:-0.04, news4w:380, lunarcrush:65, telegram:null, watchlist:420000, sentiment:0.72,
+    smartMoney7d:18e6, whale7d:32e6, whaleWallets:8,
+    rsi:38, macd:'-', ma200:-0.22, ma50:-0.08, bbp:0.25, atr:1.1,
+    moatNetwork:4, moatSwitch:5, moatScale:5, moatIntangible:4, moatCost:3,
+    secStatus:'미분류', upbit:true, bithumb:true, globalExchanges:320, regRisk:'낮음'
+  },
+  {
+    rank:5, symbol:'BNB', name:'BNB', sector:'CEX토큰', moat:'Narrow',
+    consensus:'PoSA', launched:2017, survival:3, price:575,
+    mc:82e9, fdv:82e9, vol24h:1.8e9,
+    vol30d:0.32, vol90d:0.42, betaBtc:0.82, betaEth:0.68,
+    corrBtc:0.72, corrSpx:0.28, mdd1y:-0.38, pos52w:0.58, turnover:0.022, sharpe:0.62,
+    mvrv:1.6, mvrvZ:0.6, nvt:52, nvtSignal:48, sopr:1.04, realizedPrice:358, puell:null, thermocap:null,
+    daa:1800000, newAddr:82000, txPerDay:5800000, avgTx:380, feePerAddr:0.008, feeMom:-0.08, daaMom:0.02,
+    top10:0.38, top100:0.52, hhi:1580, lth:0.62, sth:0.38, hodler1y:0.48, cexHolding:0.048, cdd:120000,
+    psr:819, pf:819, pbr:null, revYield:0.0012, eps:0.007, opMargin:0.98, roe:null, psrVsSector:9.4,
+    rev30d:8.3e6, revAnnual:100.1e6, fees30d:8.4e6, feesAnnual:100.1e6, revMom:0.04, revQoq:-0.12, feesMom:0.02, tvlMom:-0.02, stakeApy:0.032,
+    price30d:0.04, price1y:0.12, athDist:-0.25,
+    circRatio:1.00, fdvMc:1.00, maxSupply:200e6, inflation:0, stake:0.22, unlock90d:0, unlock180d:0, teamHold:0.40, burnCum:58e6, feePolicy:'소각(분기)',
+    funding:0.005, oi:1.2e9, oiMc:0.015, ls:1.05, perpBasis:0.028, iv:0.42,
+    cexFlow7d:-22e6, cexFlow30d:-80e6, cexHoldMom:-0.006, stableInflow:2.8e9,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.005,
+    activeDevs:58, coreDevs:12, ftDevs:28, devMom:0, contributors:32, pr4w:22, stars:2800, commits4w:42,
+    xMom:0.04, reddit:180000, redditMom:0.002, gtrends:28, gtrendsMom:-0.02, news4w:680, lunarcrush:58, telegram:120000, watchlist:680000, sentiment:0.68,
+    smartMoney7d:42e6, whale7d:120e6, whaleWallets:22,
+    rsi:52, macd:'+', ma200:0.04, ma50:0.02, bbp:0.52, atr:18,
+    moatNetwork:4, moatSwitch:3, moatScale:3, moatIntangible:3, moatCost:2,
+    secStatus:'소송중(SEC)', upbit:false, bithumb:false, globalExchanges:180, regRisk:'높음'
+  },
+  {
+    rank:4, symbol:'XRP', name:'XRP', sector:'결제', moat:'Narrow',
+    consensus:'RPCA', launched:2012, survival:3, price:1.41,
+    mc:84.8e9, fdv:138.1e9, vol24h:3.2e9,
+    vol30d:0.48, vol90d:0.62, betaBtc:1.18, betaEth:0.88,
+    corrBtc:0.62, corrSpx:0.22, mdd1y:-0.62, pos52w:0.42, turnover:0.038, sharpe:0.18,
+    mvrv:1.4, mvrvZ:0.3, nvt:null, nvtSignal:null, sopr:1.01, realizedPrice:1.01, puell:null, thermocap:null,
+    daa:120000, newAddr:8500, txPerDay:1200000, avgTx:1800, feePerAddr:0.002, feeMom:0.02, daaMom:-0.04,
+    top10:0.42, top100:0.58, hhi:1820, lth:0.58, sth:0.42, hodler1y:0.48, cexHolding:0.082, cdd:180000,
+    psr:null, pf:null, pbr:null, revYield:null, eps:null, opMargin:null, roe:null, psrVsSector:null,
+    rev30d:null, revAnnual:null, fees30d:27000, feesAnnual:324000, revMom:null, revQoq:null, feesMom:-0.08, tvlMom:null, stakeApy:null,
+    price30d:0.025, price1y:-0.259, athDist:-0.622,
+    circRatio:0.614, fdvMc:1.63, maxSupply:100e9, inflation:0.02, stake:0, unlock90d:0.015, unlock180d:0.03, teamHold:0.42, burnCum:12e6, feePolicy:'소각(소량)',
+    funding:0.007, oi:3.8e9, oiMc:0.045, ls:1.12, perpBasis:0.048, iv:0.72,
+    cexFlow7d:-42e6, cexFlow30d:-180e6, cexHoldMom:-0.012, stableInflow:null,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.028,
+    activeDevs:48, coreDevs:8, ftDevs:15, devMom:-0.04, contributors:22, pr4w:12, stars:4000, commits4w:4,
+    xMom:0.08, reddit:320000, redditMom:0.004, gtrends:32, gtrendsMom:0.04, news4w:820, lunarcrush:78, telegram:null, watchlist:1100000, sentiment:0.846,
+    smartMoney7d:58e6, whale7d:180e6, whaleWallets:42,
+    rsi:48, macd:'-', ma200:-0.08, ma50:0.02, bbp:0.42, atr:0.08,
+    moatNetwork:3, moatSwitch:5, moatScale:3, moatIntangible:4, moatCost:3,
+    secStatus:'명확(증권 아님)', upbit:true, bithumb:true, globalExchanges:320, regRisk:'낮음'
+  },
+  {
+    rank:54, symbol:'AAVE', name:'Aave', sector:'DeFi', moat:'Narrow',
+    consensus:'-', launched:2020, survival:2, price:95,
+    mc:1.5e9, fdv:1.5e9, vol24h:452.2e6,
+    vol30d:0.62, vol90d:0.78, betaBtc:1.42, betaEth:1.18,
+    corrBtc:0.68, corrSpx:0.22, mdd1y:-0.72, pos52w:0.15, turnover:0.302, sharpe:-0.42,
+    mvrv:0.8, mvrvZ:-0.6, nvt:null, nvtSignal:null, sopr:0.94, realizedPrice:118, puell:null, thermocap:null,
+    daa:18000, newAddr:1200, txPerDay:48000, avgTx:8500, feePerAddr:2.53, feeMom:-0.08, daaMom:-0.12,
+    top10:0.32, top100:0.52, hhi:1240, lth:null, sth:null, hodler1y:0.42, cexHolding:0.058, cdd:null,
+    psr:21, pf:33, pbr:null, revYield:0.049, eps:4.67, opMargin:0.129, roe:null, psrVsSector:0.5,
+    rev30d:5.9e6, revAnnual:70.8e6, fees30d:45.6e6, feesAnnual:547e6, revMom:-0.092, revQoq:-0.24, feesMom:-0.12, tvlMom:0.08, stakeApy:0.068,
+    price30d:-0.10, price1y:-0.268, athDist:-0.855,
+    circRatio:0.948, fdvMc:1.06, maxSupply:16e6, inflation:0.01, stake:0.28, unlock90d:0, unlock180d:0, teamHold:0.12, burnCum:0, feePolicy:'바이백',
+    funding:0.004, oi:120e6, oiMc:0.08, ls:0.92, perpBasis:0.032, iv:0.82,
+    cexFlow7d:-5e6, cexFlow30d:-18e6, cexHoldMom:-0.012, stableInflow:null,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.008,
+    activeDevs:85, coreDevs:15, ftDevs:32, devMom:0.04, contributors:58, pr4w:38, stars:1200, commits4w:48,
+    xMom:-0.02, reddit:48000, redditMom:-0.008, gtrends:18, gtrendsMom:-0.04, news4w:220, lunarcrush:58, telegram:18000, watchlist:244000, sentiment:0.708,
+    smartMoney7d:8e6, whale7d:18e6, whaleWallets:4,
+    rsi:32, macd:'-', ma200:-0.42, ma50:-0.12, bbp:0.18, atr:12,
+    moatNetwork:4, moatSwitch:4, moatScale:3, moatIntangible:3, moatCost:3,
+    secStatus:'미분류', upbit:true, bithumb:true, globalExchanges:140, regRisk:'중'
+  },
+  {
+    rank:10, symbol:'DOGE', name:'Dogecoin', sector:'밈', moat:'None',
+    consensus:'PoW', launched:2013, survival:3, price:0.097,
+    mc:14.5e9, fdv:14.5e9, vol24h:1.6e9,
+    vol30d:0.62, vol90d:0.82, betaBtc:1.85, betaEth:1.45,
+    corrBtc:0.68, corrSpx:0.28, mdd1y:-0.72, pos52w:0.22, turnover:0.110, sharpe:-0.22,
+    mvrv:1.2, mvrvZ:0.1, nvt:82, nvtSignal:88, sopr:0.98, realizedPrice:0.081, puell:null, thermocap:null,
+    daa:82000, newAddr:4200, txPerDay:42000, avgTx:180, feePerAddr:0.002, feeMom:-0.22, daaMom:-0.08,
+    top10:0.68, top100:0.82, hhi:4800, lth:0.52, sth:0.48, hodler1y:0.38, cexHolding:0.118, cdd:320000,
+    psr:null, pf:null, pbr:null, revYield:null, eps:null, opMargin:null, roe:null, psrVsSector:null,
+    rev30d:null, revAnnual:null, fees30d:82000, feesAnnual:984000, revMom:null, revQoq:null, feesMom:-0.18, tvlMom:null, stakeApy:null,
+    price30d:0.044, price1y:-0.367, athDist:-0.871,
+    circRatio:1.00, fdvMc:1.00, maxSupply:null, inflation:0.034, stake:0, unlock90d:0.008, unlock180d:0.017, teamHold:0, burnCum:0, feePolicy:'없음',
+    funding:0.008, oi:1.4e9, oiMc:0.097, ls:1.18, perpBasis:0.068, iv:0.92,
+    cexFlow7d:-12e6, cexFlow30d:-42e6, cexHoldMom:-0.008, stableInflow:null,
+    etfFlow7d:null, etfCum:null, etfAumMc:null, kimchi:0.018,
+    activeDevs:22, coreDevs:4, ftDevs:8, devMom:0, contributors:12, pr4w:6, stars:14000, commits4w:null,
+    xMom:0.22, reddit:2600000, redditMom:0.008, gtrends:42, gtrendsMom:0.12, news4w:1200, lunarcrush:85, telegram:null, watchlist:863000, sentiment:0.783,
+    smartMoney7d:-8e6, whale7d:-42e6, whaleWallets:-12,
+    rsi:42, macd:'-', ma200:-0.28, ma50:-0.05, bbp:0.32, atr:0.008,
+    moatNetwork:3, moatSwitch:1, moatScale:2, moatIntangible:4, moatCost:2,
+    secStatus:'Commodity(추정)', upbit:true, bithumb:true, globalExchanges:380, regRisk:'낮음'
+  }
+];
+
+// ============================================================================
+// 추가 지표 오버레이 — 매크로/촉매/펀딩/보안/생태계 (v4.1 확장)
+// ============================================================================
+const EXTRA = {
+  BTC: {
+    marketShare:0.519, corrBtc90d:1.00, corrEth90d:0.78, corrSpx90d:0.42, sectorRelPerf30d:0.04, btcBeta90d:1.00, fngSensitivity:1.0,
+    nextUnlockDate:null, nextUnlockPct:0, nextUnlockDays:null, majorUpgradeName:null, majorUpgradeDate:null, etfDecisionDate:null, halvingDays:1095, catalystScore:3,
+    totalFunding:0, latestRound:'N/A (탈중앙)', latestValuation:null, latestRoundDate:null, topVCs:'None (탈중앙 시작)', vcTier:null, investorTokenAlloc:0, investorLockupEnd:null,
+    auditCount:null, lastAuditDate:null, auditFirms:'Bitcoin Core (오픈소스)', bugBountyMax:0, hackHistoryCount:0, hackTotalLoss:0, multisigType:'PoW Network', securityScore:10,
+    dappCount:null, topDappShare:null, stableOnChainMc:0.3e9, topDappName:'Ordinals/Runes', topDappDau:15000, chainFeeShare:0.08, bridgeInflow30d:80e6, nftVolume30d:80e6
+  },
+  ETH: {
+    marketShare:0.101, corrBtc90d:0.82, corrEth90d:1.00, corrSpx90d:0.38, sectorRelPerf30d:-0.02, btcBeta90d:1.28, fngSensitivity:0.85,
+    nextUnlockDate:null, nextUnlockPct:0, nextUnlockDays:null, majorUpgradeName:'Pectra (Phase 2)', majorUpgradeDate:'2026-05-15', etfDecisionDate:null, halvingDays:null, catalystScore:4,
+    totalFunding:18e6, latestRound:'ICO (2014)', latestValuation:null, latestRoundDate:'2014-07', topVCs:'Public ICO', vcTier:null, investorTokenAlloc:0.09, investorLockupEnd:'2016-01',
+    auditCount:45, lastAuditDate:'2026-03-15', auditFirms:'ConsenSys Diligence·Trail of Bits·ChainSecurity', bugBountyMax:1000000, hackHistoryCount:1, hackTotalLoss:60e6, multisigType:'L1 (Validator 1M+)', securityScore:9,
+    dappCount:4200, topDappShare:0.68, stableOnChainMc:128e9, topDappName:'Uniswap V3', topDappDau:185000, chainFeeShare:0.35, bridgeInflow30d:1800e6, nftVolume30d:180e6
+  },
+  SOL: {
+    marketShare:0.018, corrBtc90d:0.72, corrEth90d:0.68, corrSpx90d:0.32, sectorRelPerf30d:-0.08, btcBeta90d:1.62, fngSensitivity:1.15,
+    nextUnlockDate:'2026-05-04', nextUnlockPct:0.003, nextUnlockDays:15, majorUpgradeName:'Firedancer (Mainnet)', majorUpgradeDate:'2026-08-01', etfDecisionDate:'2026-06-15', halvingDays:null, catalystScore:5,
+    totalFunding:335e6, latestRound:'FTX Round (2021)', latestValuation:20e9, latestRoundDate:'2021-06', topVCs:'a16z, Polychain, Multicoin, Alameda', vcTier:1, investorTokenAlloc:0.37, investorLockupEnd:'2023-01',
+    auditCount:22, lastAuditDate:'2026-02-20', auditFirms:'Kudelski·Quantstamp·Neodyme', bugBountyMax:2000000, hackHistoryCount:2, hackTotalLoss:628e6, multisigType:'Multi-validator', securityScore:7,
+    dappCount:820, topDappShare:0.52, stableOnChainMc:5.2e9, topDappName:'Jupiter', topDappDau:280000, chainFeeShare:0.18, bridgeInflow30d:320e6, nftVolume30d:62e6
+  },
+  TRX: {
+    marketShare:0.0111, corrBtc90d:0.48, corrEth90d:0.42, corrSpx90d:0.18, sectorRelPerf30d:0.12, btcBeta90d:0.52, fngSensitivity:0.35,
+    nextUnlockDate:null, nextUnlockPct:0, nextUnlockDays:null, majorUpgradeName:'Stellar Reset', majorUpgradeDate:'2026-07-15', etfDecisionDate:null, halvingDays:null, catalystScore:2,
+    totalFunding:70e6, latestRound:'ICO (2017)', latestValuation:null, latestRoundDate:'2017-08', topVCs:'Public ICO, FBG Capital', vcTier:3, investorTokenAlloc:0.15, investorLockupEnd:'2020-01',
+    auditCount:12, lastAuditDate:'2025-11-08', auditFirms:'SlowMist·CertiK', bugBountyMax:500000, hackHistoryCount:1, hackTotalLoss:8e6, multisigType:'27 Super Reps (DPoS)', securityScore:6,
+    dappCount:1800, topDappShare:0.85, stableOnChainMc:62e9, topDappName:'Tether (USDT)', topDappDau:2400000, chainFeeShare:0.12, bridgeInflow30d:220e6, nftVolume30d:2.5e6
+  },
+  HYPE: {
+    marketShare:0.0035, corrBtc90d:0.58, corrEth90d:0.62, corrSpx90d:0.22, sectorRelPerf30d:0.35, btcBeta90d:1.85, fngSensitivity:1.5,
+    nextUnlockDate:'2026-11-29', nextUnlockPct:0.089, nextUnlockDays:224, majorUpgradeName:'HyperEVM Mainnet', majorUpgradeDate:'2026-05-20', etfDecisionDate:null, halvingDays:null, catalystScore:5,
+    totalFunding:0, latestRound:'Self-funded (No VC)', latestValuation:null, latestRoundDate:null, topVCs:'None (자체 자금)', vcTier:null, investorTokenAlloc:0, investorLockupEnd:'2026-11-29',
+    auditCount:6, lastAuditDate:'2025-12-20', auditFirms:'Zellic·Ottersec', bugBountyMax:1000000, hackHistoryCount:0, hackTotalLoss:0, multisigType:'4-of-N Core Team', securityScore:7,
+    dappCount:42, topDappShare:0.95, stableOnChainMc:0.8e9, topDappName:'Hyperliquid Perp DEX', topDappDau:58000, chainFeeShare:0.05, bridgeInflow30d:180e6, nftVolume30d:0.5e6
+  },
+  LINK: {
+    marketShare:0.003, corrBtc90d:0.78, corrEth90d:0.88, corrSpx90d:0.28, sectorRelPerf30d:-0.04, btcBeta90d:1.35, fngSensitivity:0.85,
+    nextUnlockDate:'2026-05-07', nextUnlockPct:0.008, nextUnlockDays:18, majorUpgradeName:'CCIP v1.6', majorUpgradeDate:'2026-06-10', etfDecisionDate:null, halvingDays:null, catalystScore:3,
+    totalFunding:32e6, latestRound:'ICO (2017)', latestValuation:null, latestRoundDate:'2017-09', topVCs:'Public ICO', vcTier:null, investorTokenAlloc:0.35, investorLockupEnd:null,
+    auditCount:28, lastAuditDate:'2026-01-15', auditFirms:'SigmaPrime·Trail of Bits·OpenZeppelin', bugBountyMax:1500000, hackHistoryCount:0, hackTotalLoss:0, multisigType:'4-of-9 Oracle Nodes', securityScore:9,
+    dappCount:null, topDappShare:null, stableOnChainMc:null, topDappName:null, topDappDau:null, chainFeeShare:null, bridgeInflow30d:null, nftVolume30d:null
+  },
+  BNB: {
+    marketShare:0.030, corrBtc90d:0.72, corrEth90d:0.68, corrSpx90d:0.28, sectorRelPerf30d:0.02, btcBeta90d:0.82, fngSensitivity:0.65,
+    nextUnlockDate:null, nextUnlockPct:0, nextUnlockDays:null, majorUpgradeName:'Greenfield v2', majorUpgradeDate:'2026-07-01', etfDecisionDate:null, halvingDays:null, catalystScore:2,
+    totalFunding:15e6, latestRound:'ICO (2017)', latestValuation:null, latestRoundDate:'2017-07', topVCs:'Public ICO', vcTier:null, investorTokenAlloc:0.40, investorLockupEnd:'2021-01',
+    auditCount:18, lastAuditDate:'2025-10-12', auditFirms:'CertiK·SlowMist·PeckShield', bugBountyMax:10000000, hackHistoryCount:1, hackTotalLoss:570e6, multisigType:'17/26 Validators', securityScore:6,
+    dappCount:5200, topDappShare:0.42, stableOnChainMc:6.8e9, topDappName:'PancakeSwap', topDappDau:380000, chainFeeShare:0.15, bridgeInflow30d:480e6, nftVolume30d:18e6
+  },
+  XRP: {
+    marketShare:0.0314, corrBtc90d:0.62, corrEth90d:0.58, corrSpx90d:0.22, sectorRelPerf30d:-0.06, btcBeta90d:1.18, fngSensitivity:0.95,
+    nextUnlockDate:'2026-05-01', nextUnlockPct:0.003, nextUnlockDays:12, majorUpgradeName:'XRPL Sidechain', majorUpgradeDate:'2026-09-01', etfDecisionDate:'2026-07-22', halvingDays:null, catalystScore:4,
+    totalFunding:55e6, latestRound:'Series C (2019)', latestValuation:10e9, latestRoundDate:'2019-12', topVCs:'Tetragon, SBI, IDG Capital', vcTier:2, investorTokenAlloc:0.80, investorLockupEnd:'2027-01',
+    auditCount:8, lastAuditDate:'2025-08-15', auditFirms:'Peter Todd·BitMEX Research', bugBountyMax:100000, hackHistoryCount:0, hackTotalLoss:0, multisigType:'UNL (Unique Node List)', securityScore:8,
+    dappCount:150, topDappShare:0.60, stableOnChainMc:0.15e9, topDappName:'XRPL DEX', topDappDau:12000, chainFeeShare:0.02, bridgeInflow30d:25e6, nftVolume30d:2e6
+  },
+  AAVE: {
+    marketShare:0.00056, corrBtc90d:0.68, corrEth90d:0.92, corrSpx90d:0.22, sectorRelPerf30d:-0.12, btcBeta90d:1.42, fngSensitivity:1.2,
+    nextUnlockDate:null, nextUnlockPct:0, nextUnlockDays:null, majorUpgradeName:'Aave v4', majorUpgradeDate:'2026-06-30', etfDecisionDate:null, halvingDays:null, catalystScore:3,
+    totalFunding:49e6, latestRound:'Series A (2020)', latestValuation:150e6, latestRoundDate:'2020-07', topVCs:'Three Arrows Capital, ParaFi, Framework', vcTier:2, investorTokenAlloc:0.23, investorLockupEnd:'2021-10',
+    auditCount:15, lastAuditDate:'2025-12-01', auditFirms:'OpenZeppelin·Trail of Bits·Certora·SigmaPrime', bugBountyMax:1000000, hackHistoryCount:1, hackTotalLoss:0.5e6, multisigType:'Aave DAO 거버넌스', securityScore:8,
+    dappCount:null, topDappShare:null, stableOnChainMc:null, topDappName:null, topDappDau:null, chainFeeShare:null, bridgeInflow30d:null, nftVolume30d:null
+  },
+  DOGE: {
+    marketShare:0.00537, corrBtc90d:0.68, corrEth90d:0.52, corrSpx90d:0.28, sectorRelPerf30d:0.08, btcBeta90d:1.85, fngSensitivity:1.8,
+    nextUnlockDate:null, nextUnlockPct:0, nextUnlockDays:null, majorUpgradeName:'Core v1.14.8', majorUpgradeDate:'2026-06-01', etfDecisionDate:'2026-07-15', halvingDays:null, catalystScore:2,
+    totalFunding:0, latestRound:'Litecoin Fork (2013)', latestValuation:null, latestRoundDate:null, topVCs:'None (밈 기원)', vcTier:null, investorTokenAlloc:0, investorLockupEnd:null,
+    auditCount:3, lastAuditDate:'2024-06-10', auditFirms:'Dogecoin Foundation (내부)', bugBountyMax:50000, hackHistoryCount:0, hackTotalLoss:0, multisigType:'PoW Network', securityScore:6,
+    dappCount:null, topDappShare:null, stableOnChainMc:0, topDappName:null, topDappDau:null, chainFeeShare:0.005, bridgeInflow30d:null, nftVolume30d:null
+  }
+};
+Object.entries(EXTRA).forEach(([sym, data]) => {
+  const coin = COINS.find(c => c.symbol === sym);
+  if (coin) Object.assign(coin, data);
+});
+
+// ============================================================================
+// 추가 지표 오버레이 2 — 성장심화/리스크조정/유동성/실질수익률/홀더세그먼트
+// ============================================================================
+const EXTRA2 = {
+  BTC: {
+    revYoY:null, revCagr3y:null, revGrowthStreak:null, revCv:null,
+    peg:null, evRev:null, ruleOf40:null,
+    sortino:0.62, calmar:0.16, infoRatio:0.22, alpha:0.04, var95:-0.045,
+    bidAskSpread:0.00003, slippage1m:0.00008, obDepth2pct:850e6, amihud:0.12,
+    realYield:0, realRevYield:null, dilutionAdjReturn:-0.106,
+    institutionalHold:0.058, retailShare:0.42, avgWallet:12000, newHolderShare:0.18, holdPeriodMedian:430
+  },
+  ETH: {
+    revYoY:0.28, revCagr3y:0.85, revGrowthStreak:4, revCv:0.52,
+    peg:0.04, evRev:12000, ruleOf40:47,
+    sortino:0.28, calmar:0.63, infoRatio:0.12, alpha:-0.02, var95:-0.058,
+    bidAskSpread:0.00008, slippage1m:0.00015, obDepth2pct:480e6, amihud:0.35,
+    realYield:0.025, realRevYield:0.001, dilutionAdjReturn:0.430,
+    institutionalHold:0.038, retailShare:0.35, avgWallet:850, newHolderShare:0.22, holdPeriodMedian:280
+  },
+  SOL: {
+    revYoY:0.45, revCagr3y:1.8, revGrowthStreak:2, revCv:0.85,
+    peg:0.50, evRev:2200, ruleOf40:55,
+    sortino:-0.38, calmar:-0.29, infoRatio:-0.21, alpha:-0.08, var95:-0.092,
+    bidAskSpread:0.0002, slippage1m:0.0005, obDepth2pct:180e6, amihud:0.58,
+    realYield:0.007, realRevYield:null, dilutionAdjReturn:-0.271,
+    institutionalHold:0.025, retailShare:0.28, avgWallet:280, newHolderShare:0.38, holdPeriodMedian:120
+  },
+  TRX: {
+    revYoY:0.35, revCagr3y:0.92, revGrowthStreak:8, revCv:0.22,
+    peg:2.49, evRev:85, ruleOf40:135,
+    sortino:1.85, calmar:1.12, infoRatio:0.85, alpha:0.12, var95:-0.028,
+    bidAskSpread:0.0003, slippage1m:0.0008, obDepth2pct:45e6, amihud:1.2,
+    realYield:0.04, realRevYield:0.012, dilutionAdjReturn:0.359,
+    institutionalHold:0.015, retailShare:0.52, avgWallet:80, newHolderShare:0.12, holdPeriodMedian:520
+  },
+  HYPE: {
+    revYoY:3.2, revCagr3y:null, revGrowthStreak:3, revCv:0.42,
+    peg:0.044, evRev:13, ruleOf40:410,
+    sortino:2.85, calmar:2.1, infoRatio:1.8, alpha:0.35, var95:-0.095,
+    bidAskSpread:0.0008, slippage1m:0.002, obDepth2pct:12e6, amihud:3.8,
+    realYield:null, realRevYield:-0.11, dilutionAdjReturn:2.115,
+    institutionalHold:0.008, retailShare:0.22, avgWallet:1800, newHolderShare:0.68, holdPeriodMedian:45
+  },
+  LINK: {
+    revYoY:0.12, revCagr3y:0.18, revGrowthStreak:2, revCv:0.35,
+    peg:9.2, evRev:108, ruleOf40:94,
+    sortino:-0.18, calmar:-0.20, infoRatio:-0.08, alpha:-0.04, var95:-0.068,
+    bidAskSpread:0.0004, slippage1m:0.0012, obDepth2pct:28e6, amihud:2.1,
+    realYield:0.026, realRevYield:null, dilutionAdjReturn:-0.40,
+    institutionalHold:0.022, retailShare:0.38, avgWallet:180, newHolderShare:0.15, holdPeriodMedian:310
+  },
+  BNB: {
+    revYoY:0.18, revCagr3y:0.32, revGrowthStreak:3, revCv:0.28,
+    peg:45.5, evRev:800, ruleOf40:116,
+    sortino:0.82, calmar:0.32, infoRatio:0.18, alpha:0.02, var95:-0.042,
+    bidAskSpread:0.00008, slippage1m:0.0002, obDepth2pct:320e6, amihud:0.28,
+    realYield:0.032, realRevYield:0.0012, dilutionAdjReturn:0.12,
+    institutionalHold:0.028, retailShare:0.45, avgWallet:220, newHolderShare:0.18, holdPeriodMedian:380
+  },
+  XRP: {
+    revYoY:null, revCagr3y:null, revGrowthStreak:null, revCv:null,
+    peg:null, evRev:null, ruleOf40:null,
+    sortino:0.25, calmar:0.23, infoRatio:-0.12, alpha:-0.06, var95:-0.058,
+    bidAskSpread:0.0001, slippage1m:0.0003, obDepth2pct:250e6, amihud:0.45,
+    realYield:null, realRevYield:null, dilutionAdjReturn:-0.279,
+    institutionalHold:0.048, retailShare:0.38, avgWallet:850, newHolderShare:0.18, holdPeriodMedian:420
+  },
+  AAVE: {
+    revYoY:-0.12, revCagr3y:0.45, revGrowthStreak:0, revCv:0.68,
+    peg:null, evRev:20, ruleOf40:4,
+    sortino:-0.58, calmar:-0.37, infoRatio:-0.25, alpha:-0.12, var95:-0.078,
+    bidAskSpread:0.0006, slippage1m:0.0018, obDepth2pct:18e6, amihud:2.8,
+    realYield:0.058, realRevYield:0.039, dilutionAdjReturn:-0.278,
+    institutionalHold:0.018, retailShare:0.42, avgWallet:180, newHolderShare:0.22, holdPeriodMedian:210
+  },
+  DOGE: {
+    revYoY:null, revCagr3y:null, revGrowthStreak:null, revCv:null,
+    peg:null, evRev:null, ruleOf40:null,
+    sortino:-0.32, calmar:-0.51, infoRatio:-0.18, alpha:-0.04, var95:-0.082,
+    bidAskSpread:0.0002, slippage1m:0.0005, obDepth2pct:120e6, amihud:0.62,
+    realYield:null, realRevYield:null, dilutionAdjReturn:-0.401,
+    institutionalHold:0.012, retailShare:0.68, avgWallet:40, newHolderShare:0.15, holdPeriodMedian:180
+  }
+};
+Object.entries(EXTRA2).forEach(([sym, data]) => {
+  const coin = COINS.find(c => c.symbol === sym);
+  if (coin) Object.assign(coin, data);
+});
+
+// ============================================================================
+// 지표 정의 — 카테고리별 컬럼 + 포맷터 + 색상 규칙
+// ============================================================================
+const fmt = {
+  bigUSD: v => v==null?na():v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1e3?'$'+(v/1e3).toFixed(1)+'K':'$'+v.toFixed(0),
+  usd: v => v==null?na():v>=1e9?'$'+(v/1e9).toFixed(1)+'B':v>=1e6?'$'+(v/1e6).toFixed(1)+'M':v>=1000?'$'+v.toLocaleString('en',{maximumFractionDigits:0}):v>=1?'$'+v.toFixed(2):'$'+v.toFixed(4),
+  num: v => v==null?na():v>=1e9?(v/1e9).toFixed(1)+'B':v>=1e6?(v/1e6).toFixed(1)+'M':v>=1e3?(v/1e3).toFixed(1)+'K':v.toFixed(0),
+  pct: v => v==null?na():(v>=0?'+':'')+(v*100).toFixed(1)+'%',
+  pctSign: v => v==null?na():`<span class="${v>0?'up':v<0?'down':'neutral'}">${v>=0?'+':''}${(v*100).toFixed(1)}%</span>`,
+  pctColor: (v,good='up') => {
+    if(v==null) return na();
+    const s = (v>=0?'+':'')+(v*100).toFixed(1)+'%';
+    const cls = good==='up' ? (v>0?'up':v<0?'down':'neutral') : (v>0?'down':v<0?'up':'neutral');
+    return `<span class="${cls}">${s}</span>`;
+  },
+  ratio: v => v==null?na():v.toFixed(2)+'x',
+  ratioK: v => v==null?na():v>=1000?(v/1000).toFixed(1)+'Kx':v.toFixed(1)+'x',
+  year: v => v==null?na():v,
+  times: v => v==null?na():v+'회',
+  flag: v => v==null?na():v?`<span class="flag yes">✓</span>`:`<span class="flag no">✗</span>`,
+  text: v => v==null?na():`<span class="txt">${v}</span>`,
+  raw: v => v==null?na():v,
+  stars: v => v==null?na():`<span class="star">${'★'.repeat(v)}${'☆'.repeat(5-v)}</span>`,
+  price: v => v==null?na():v>=1000?'$'+v.toLocaleString('en',{maximumFractionDigits:0}):v>=1?'$'+v.toFixed(2):'$'+v.toFixed(4),
+  macd: v => v==null?na():v==='+'?'<span class="up">매수</span>':v==='-'?'<span class="down">매도</span>':'<span class="neutral">중립</span>',
+  riskLevel: v => v==null?na():v==='낮음'?`<span class="up">${v}</span>`:v==='높음'?`<span class="down">${v}</span>`:`<span class="warn">${v}</span>`,
+  rsi: v => v==null?na():v>=70?`<span class="down">${v}</span>`:v<=30?`<span class="up">${v}</span>`:v
+};
+function na(){return '<span class="na">—</span>'}
+
+// 지표별 설명 (헤더 호버 툴팁)
+const DESC = {
+  rank:'시가총액 전체 순위',
+  mc:'시가총액 (Market Cap). 현재 가격 × 유통 공급량.',
+  fdv:'완전 희석 시가총액 (Fully Diluted Valuation). 최대 공급량이 모두 유통될 때의 시총.',
+  vol24h:'24시간 거래량',
+  price:'현재 가격 (USD)',
+  price30d:'최근 30일 가격 변동률',
+  price1y:'최근 1년 가격 변동률',
+  athDist:'역대 최고가(All-Time High) 대비 현재 위치. −80%면 고점 대비 80% 하락 상태.',
+  moat:'모닝스타 경제적 해자 등급. Wide=광범위 / Narrow=협소 / None=없음. 프로토콜이 얼마나 구조적으로 방어 가능한가.',
+  activeDevs:'Electric Capital 방법론 기준 활성 개발자 (월 커밋 1회 이상)',
+  vol30d:'30일 연환산 변동성. 가격이 얼마나 출렁이는가. 주식 변동성 개념과 동일.',
+  vol90d:'90일 연환산 변동성. 더 긴 기간의 안정성 지표.',
+  betaBtc:'BTC 대비 베타. 1 초과시 BTC보다 더 출렁임. 포트폴리오 리스크 측정.',
+  betaEth:'ETH 대비 베타',
+  corrBtc:'BTC와의 상관계수. 1=완전 동조, 0=무관, −1=역상관',
+  corrSpx:'S&amp;P500과의 상관계수. 주식과의 연계성.',
+  mdd1y:'1년 최대 낙폭 (Maximum Drawdown). 고점에서 저점까지 떨어진 폭.',
+  pos52w:'52주 고/저 대비 현재 위치. 0=1년 저점, 1=1년 고점',
+  turnover:'거래 회전율 = 24h 거래량 / 시총. 유동성의 활발함.',
+  sharpe:'샤프 비율 (1년). 위험 대비 수익률. 1 초과시 우수, 0 미만시 손실.',
+  mvrv:'MVRV (Market Value to Realized Value). 시장가치 / 실현가치. 3.5 초과시 과열, 1 미만시 바닥 신호. 주식 PER과 유사한 역할.',
+  mvrvZ:'MVRV Z-Score. MVRV를 정규화한 값. 7 초과시 역사적 과열, 0 미만시 역사적 바닥.',
+  nvt:'NVT Ratio (Network Value to Transactions). 시총 / 온체인 거래량. 크립토의 P/E 대응.',
+  nvtSignal:'NVT Signal. NVT의 92일 이동평균 버전. 장기 추세 판단.',
+  sopr:'SOPR (Spent Output Profit Ratio). 1 초과시 평균적으로 차익 실현, 1 미만시 손절 매도.',
+  realizedPrice:'실현 가격. 마지막으로 이동된 시점의 가격 평균. 시장 평균 매입가.',
+  puell:'Puell Multiple. 채굴자 수익 / 365일 평균. 채굴자 관점 과열도 (주로 BTC).',
+  thermocap:'Thermocap Ratio. 시총 / 누적 채굴 보상. 장기 사이클 지표.',
+  daa:'DAA (Daily Active Addresses). 일 활성 주소 수. 실제 사용자 규모 지표.',
+  newAddr:'일 신규 주소 수. 네트워크 신규 유입.',
+  txPerDay:'일 트랜잭션 수. 네트워크 처리량.',
+  avgTx:'평균 트랜잭션 가치 (USD). 고부가가치 사용인지 소액인지.',
+  feePerAddr:'객단가 = 일 수수료 / DAA. 유저 1명이 지불하는 평균 수수료. 진짜 유저 vs 봇 구분.',
+  feeMom:'수수료 월간 증감률. 네트워크 사용 성장.',
+  daaMom:'일 활성 주소 월간 증감률',
+  top10:'상위 10개 지갑이 보유한 비중. 집중도 지표.',
+  top100:'상위 100개 지갑이 보유한 비중',
+  hhi:'HHI (허핀달-허시먼 지수). 집중도를 정량화한 값. 높을수록 소수가 많이 보유.',
+  lth:'Long-Term Holder 비중. 155일 이상 이동이 없는 코인. 다이아몬드 핸드.',
+  sth:'Short-Term Holder 비중. 155일 미만 이동 코인. 단기 트레이더.',
+  hodler1y:'1년 이상 이동이 없는 코인 비중. 강한 장기 보유.',
+  cexHolding:'중앙화 거래소 지갑에 있는 비중. 높을수록 매도 압력 가능성.',
+  cdd:'Coin Days Destroyed. 장기 보유자가 이동한 양. 급등 시 증가.',
+  psr:'PSR (Price to Sales). 시총 / 연환산 매출. 낮을수록 매출 대비 저평가. 주식 PSR과 동일 개념.',
+  pf:'P/F Ratio. 시총 / 연환산 수수료. DeFi·L1 평가용 PSR 변형.',
+  pbr:'PBR 대응 (시총 / TVL). 장부가 대신 Total Value Locked 사용. DeFi에만 유효.',
+  revYield:'Revenue Yield = 연환산 매출 / 시총. PSR의 역수. 주식 배당수익률 대응.',
+  eps:'EPS 대응 (연환산 매출 / 유통 공급량). 토큰 하나당 매출. 주식 주당순이익(EPS) 대응.',
+  opMargin:'영업이익률 = 매출 / 수수료 (Take Rate). 프로토콜이 총 수수료에서 가져가는 비율.',
+  roe:'ROE 대응 (연환산 매출 / TVL). 자기자본이익률 대응. 생태계 자산 대비 수익 효율.',
+  psrVsSector:'섹터 평균 PSR 대비 현재 PSR 비율. 1 미만이면 섹터 대비 저평가.',
+  rev30d:'최근 30일 프로토콜 매출 (토큰 홀더 귀속 수익)',
+  revAnnual:'매출 연환산 (30일 × 12)',
+  fees30d:'최근 30일 총 수수료 (프로토콜 매출 + LP/사용자 분배분 포함)',
+  feesAnnual:'수수료 연환산',
+  revMom:'매출 월간 증감률',
+  revQoq:'매출 분기 증감률',
+  feesMom:'수수료 월간 증감률',
+  tvlMom:'TVL 월간 증감률. 생태계 자산 유입/유출.',
+  stakeApy:'스테이킹 연이자율',
+  circRatio:'유통량 / 최대 공급량. 100%면 전량 유통.',
+  fdvMc:'FDV / 시총. 1.5 이상이면 미유통 물량이 많아 희석 리스크.',
+  maxSupply:'최대 발행량',
+  inflation:'연간 인플레이션율. 음수면 디플레이션 (소각이 발행보다 많음).',
+  stake:'스테이킹된 비율. 높을수록 유통 공급 감소.',
+  unlock90d:'90일 내 언락 예정 물량 (유통량 대비 %)',
+  unlock180d:'180일 내 언락 예정 물량',
+  teamHold:'팀/재단 보유 비중',
+  burnCum:'누적 소각량 (토큰 개수)',
+  feePolicy:'수수료 정책. 소각(디플레)·바이백(주주환원)·없음(희석 방치).',
+  funding:'Funding Rate (8시간). 영구선물 유지비. 양수면 롱이 숏에 지불 = 롱 과열.',
+  oi:'Open Interest. 미결제 선물 약정 총액.',
+  oiMc:'OI / 시총. 레버리지 과열도.',
+  ls:'Long/Short Ratio. 1 초과시 롱 포지션 우세.',
+  perpBasis:'영구선물-현물 가격차 (연환산). 프리미엄.',
+  iv:'Implied Volatility. 옵션 시장이 예상하는 변동성.',
+  cexFlow7d:'최근 7일 중앙화 거래소 순유입. 음수=유출(매도 압력 감소, 콜드 스토리지 이동).',
+  cexFlow30d:'최근 30일 거래소 순유입',
+  cexHoldMom:'거래소 보유량 월간 증감률. 감소=홀더 강화.',
+  stableInflow:'스테이블코인 거래소 유입. 매수 대기 자금.',
+  etfFlow7d:'최근 7일 현물 ETF 순유입',
+  etfCum:'현물 ETF 누적 순유입',
+  etfAumMc:'ETF AUM / 시총. 기관 포지션 비중.',
+  kimchi:'김치 프리미엄. 한국 거래소 가격이 글로벌 대비 높은 비율.',
+  coreDevs:'핵심 개발자 (월 커밋 10회 이상)',
+  ftDevs:'Full-time 수준 개발자',
+  devMom:'개발자 수 월간 증감률. 장기 가격의 선행지표 (12~18개월).',
+  contributors:'외부 기여자 수',
+  pr4w:'최근 4주 Pull Request 수',
+  stars:'GitHub Stars',
+  commits4w:'최근 4주 커밋 수',
+  xMom:'X(트위터) 언급 월간 증감률',
+  reddit:'Reddit 구독자 수',
+  redditMom:'Reddit 구독자 월간 증감률',
+  gtrends:'Google Trends 지수 (0-100). 검색 관심도.',
+  gtrendsMom:'검색량 월간 증감률',
+  news4w:'최근 4주 뉴스 언급 건수',
+  lunarcrush:'LunarCrush Galaxy Score (0-100). 소셜·시장 통합 점수.',
+  telegram:'Telegram 그룹 멤버 수',
+  watchlist:'CoinGecko 관심 등록 수',
+  sentiment:'커뮤니티 긍정 센티먼트 비율',
+  smartMoney7d:'Nansen Smart Money 라벨 지갑의 7일 순매수. 고수 지갑의 움직임.',
+  whale7d:'고래 ($10M+ 지갑) 7일 순매수',
+  whaleWallets:'고래 지갑 수 증감 (7일)',
+  rsi:'RSI (14일). 상대강도지수. 70 초과시 과매수, 30 미만시 과매도.',
+  macd:'MACD 시그널. +=매수 추세, −=매도 추세.',
+  ma200:'200일 이동평균 대비 현재가 위치',
+  ma50:'50일 이동평균 대비 현재가 위치',
+  bbp:'볼린저 밴드 %B. 0=하단, 1=상단, 0.5=중간.',
+  atr:'ATR (Average True Range). 평균 진폭. 변동성 절대값.',
+  moatNetwork:'네트워크 효과. 사용자↑ → 가치↑ 선순환. (최대 5점)',
+  moatSwitch:'전환 비용. 경쟁 프로토콜로 이동 시 사용자가 잃는 것.',
+  moatScale:'규모 경제. 크기 자체가 진입장벽 (해시파워, TVL, 상장 수).',
+  moatIntangible:'무형자산. 브랜드·규제 명확성·특허·신뢰.',
+  moatCost:'비용 우위. 같은 서비스를 더 싸게.',
+  secStatus:'미국 SEC 증권성 판단 상태',
+  upbit:'업비트 원화 마켓 상장 여부',
+  bithumb:'빗썸 원화 마켓 상장 여부',
+  globalExchanges:'상장된 글로벌 거래소 수',
+  regRisk:'종합 규제 리스크 평가',
+  // 매크로
+  marketShare:'전체 크립토 시장 시총 중 차지하는 비중',
+  corrBtc90d:'90일 BTC 상관계수. 더 긴 기간의 구조적 동조성.',
+  corrEth90d:'90일 ETH 상관계수',
+  corrSpx90d:'90일 S&amp;P500 상관계수',
+  sectorRelPerf30d:'섹터 평균 대비 30일 초과 성과. 양수면 동종 대비 우수.',
+  btcBeta90d:'90일 기준 BTC 대비 베타. 구조적 민감도.',
+  fngSensitivity:'Fear &amp; Greed 지수 민감도. 1 초과시 시장 심리보다 더 출렁임.',
+  // 촉매
+  nextUnlockDate:'다음 토큰 언락 예정일',
+  nextUnlockPct:'다음 언락 물량 (유통량 대비 %)',
+  nextUnlockDays:'다음 언락까지 남은 일수',
+  majorUpgradeName:'예정된 주요 업그레이드 코드명',
+  majorUpgradeDate:'예정된 업그레이드 날짜',
+  etfDecisionDate:'SEC 현물 ETF 결정 예정일',
+  halvingDays:'다음 반감기까지 일수 (PoW 코인만)',
+  catalystScore:'종합 촉매 점수 (1-5). 다가오는 이벤트의 예상 가격 임팩트.',
+  // 펀딩
+  totalFunding:'누적 펀딩 총액 (USD)',
+  latestRound:'최근 투자 라운드 (Seed/A/B/ICO 등)',
+  latestValuation:'최근 가치평가 (라운드 당시 USD)',
+  latestRoundDate:'최근 라운드 날짜',
+  topVCs:'주요 투자자 (Tier 1 VC 우선)',
+  vcTier:'VC 등급. T1=최상위(a16z·Paradigm), T2=주요, T3=기타',
+  investorTokenAlloc:'팀·투자자 토큰 할당 비중',
+  investorLockupEnd:'투자자 락업 종료 시점',
+  // 보안
+  auditCount:'코드 감사 누적 횟수',
+  lastAuditDate:'최근 감사 완료 날짜',
+  auditFirms:'감사 진행 업체',
+  bugBountyMax:'최대 버그바운티 상금 (USD)',
+  hackHistoryCount:'과거 해킹·익스플로잇 건수',
+  hackTotalLoss:'누적 해킹 피해액 (USD)',
+  multisigType:'멀티시그·거버넌스 구성',
+  securityScore:'종합 보안 점수 (1-10). 감사·이력·거버넌스 종합.',
+  // 생태계
+  dappCount:'체인 위에서 동작하는 dApp 수',
+  topDappShare:'TOP 10 dApp의 수수료 점유율. 높을수록 집중.',
+  stableOnChainMc:'체인 위 스테이블코인 총 시총',
+  topDappName:'체인 내 1위 dApp',
+  topDappDau:'1위 dApp 일일 활성 사용자',
+  chainFeeShare:'이 체인이 크립토 전체 수수료에서 차지하는 비율',
+  bridgeInflow30d:'최근 30일 타 체인에서 이 체인으로 브릿지 순유입',
+  nftVolume30d:'체인 내 30일 NFT 거래량',
+  // 성장 심화
+  revYoY:'매출 전년 동월 대비 증감률 (YoY). 주식 YoY 성장 대응.',
+  revCagr3y:'3년 매출 연평균 성장률 (CAGR). 장기 구조적 성장.',
+  revGrowthStreak:'매출 연속 증가 분기 수. 성장 지속성.',
+  revCv:'매출 변동계수 (표준편차/평균). 낮을수록 안정적.',
+  // 밸류 심화
+  peg:'PEG Ratio = PSR / 매출 성장률. 성장 조정 밸류에이션. 1 미만이면 성장 대비 저평가.',
+  evRev:'EV/Revenue (기업가치/매출). EV = 시총 + 부채 − 스테이블 국고. 주식 EV/Sales 대응.',
+  ruleOf40:'Rule of 40 = 매출 성장률(%) + 영업이익률(%). 40 이상이면 SaaS 우수 기업 기준.',
+  // 리스크 조정
+  sortino:'Sortino 비율. 하방 변동성만 반영한 위험 조정 수익률. 샤프 비율의 개선판.',
+  calmar:'Calmar 비율 = 1년 수익률 / MDD. 드로다운 대비 수익.',
+  infoRatio:'Information Ratio. 섹터 대비 초과수익 / 트래킹 에러.',
+  alpha:'Alpha. 섹터 벤치마크 대비 초과수익률.',
+  var95:'VaR 95%. 95% 확률 기준 일간 최대 손실 폭.',
+  // 유동성 품질
+  bidAskSpread:'Bid-Ask 스프레드 (매수/매도 호가차). 매매 비용의 직접 지표. bp=basis point.',
+  slippage1m:'$1M 슬리피지. 백만 달러 매도 시 예상 가격 충격.',
+  obDepth2pct:'Order Book Depth ±2%. 2% 가격 범위 내 주문량.',
+  amihud:'Amihud 비유동성 지수. 낮을수록 유동성 우수.',
+  // 실질 수익률
+  realYield:'실질 스테이킹 수익률 = Stake APY − 인플레이션율. 진짜 버는 이자.',
+  realRevYield:'실질 Revenue Yield = Rev Yield − 인플레이션.',
+  dilutionAdjReturn:'희석 조정 1년 수익률 = 가격 수익률 − 인플레이션율. 홀더 기준 실제 수익.',
+  // 홀더 세그먼트
+  institutionalHold:'기관 보유 비중. ETF·법인·재단 지갑 합산.',
+  retailShare:'리테일 비중. $1,000 미만 잔액 지갑 합산.',
+  avgWallet:'평균 지갑 크기 (USD).',
+  newHolderShare:'최근 3개월 내 신규 생성 지갑 비중.',
+  holdPeriodMedian:'중앙값 보유 기간 (일). 평균이 아닌 중앙값으로 편향 감소.'
+};
+
+// 탭 정의. 각 탭 = { key, label, cols:[...] }
+// cols: { key:데이터키, label:컬럼명, fmt:포맷터함수, w:최소너비 }
+const TABS = [
+  {key:'overview', label:'개요', cols:[
+    {key:'rank', label:'#', fmt:v=>'#'+v},
+    {key:'mc', label:'시총', fmt:fmt.bigUSD},
+    {key:'fdv', label:'FDV', fmt:fmt.bigUSD},
+    {key:'vol24h', label:'24h Vol', fmt:fmt.bigUSD},
+    {key:'price', label:'가격', fmt:fmt.price},
+    {key:'price30d', label:'30d', fmt:fmt.pctSign},
+    {key:'price1y', label:'1Y', fmt:fmt.pctSign},
+    {key:'athDist', label:'ATH대비', fmt:fmt.pctSign},
+    {key:'mvrv', label:'MVRV', fmt:fmt.ratio},
+    {key:'psr', label:'PSR', fmt:fmt.ratioK},
+    {key:'pf', label:'P/F', fmt:fmt.ratioK},
+    {key:'activeDevs', label:'개발자', fmt:fmt.num}
+  ]},
+  {key:'market', label:'시장동역학', cols:[
+    {key:'vol30d', label:'변동성 30d', fmt:fmt.pct},
+    {key:'vol90d', label:'변동성 90d', fmt:fmt.pct},
+    {key:'betaBtc', label:'β vs BTC', fmt:fmt.ratio},
+    {key:'betaEth', label:'β vs ETH', fmt:fmt.ratio},
+    {key:'corrBtc', label:'BTC 상관', fmt:fmt.ratio},
+    {key:'corrSpx', label:'SPX 상관', fmt:fmt.ratio},
+    {key:'mdd1y', label:'MDD 1Y', fmt:fmt.pctSign},
+    {key:'pos52w', label:'52주 위치', fmt:fmt.pct},
+    {key:'turnover', label:'회전율', fmt:fmt.pct},
+    {key:'sharpe', label:'샤프 1Y', fmt:v=>v==null?na():`<span class="${v>0.5?'up':v<0?'down':'neutral'}">${v.toFixed(2)}</span>`}
+  ]},
+  {key:'onchainVal', label:'온체인 밸류에이션', cols:[
+    {key:'mvrv', label:'MVRV', fmt:fmt.ratio},
+    {key:'mvrvZ', label:'MVRV Z', fmt:v=>v==null?na():v.toFixed(2)},
+    {key:'nvt', label:'NVT', fmt:v=>v==null?na():v},
+    {key:'nvtSignal', label:'NVT Signal', fmt:v=>v==null?na():v},
+    {key:'sopr', label:'SOPR', fmt:v=>v==null?na():v.toFixed(2)},
+    {key:'realizedPrice', label:'Realized Price', fmt:fmt.price},
+    {key:'puell', label:'Puell Multiple', fmt:v=>v==null?na():v.toFixed(2)},
+    {key:'thermocap', label:'Thermocap', fmt:v=>v==null?na():v}
+  ]},
+  {key:'onchainAct', label:'온체인 활동', cols:[
+    {key:'daa', label:'DAA', fmt:fmt.num},
+    {key:'newAddr', label:'신규주소/일', fmt:fmt.num},
+    {key:'txPerDay', label:'TX/일', fmt:fmt.num},
+    {key:'avgTx', label:'평균 TX', fmt:fmt.usd},
+    {key:'feePerAddr', label:'객단가', fmt:fmt.usd},
+    {key:'feeMom', label:'수수료 MoM', fmt:fmt.pctSign},
+    {key:'daaMom', label:'DAA MoM', fmt:fmt.pctSign}
+  ]},
+  {key:'holders', label:'홀더', cols:[
+    {key:'top10', label:'상위 10 %', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'top100', label:'상위 100 %', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'hhi', label:'HHI', fmt:v=>v==null?na():v},
+    {key:'lth', label:'LTH 비중', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'sth', label:'STH 비중', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'hodler1y', label:'1y+ HODLer', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'cexHolding', label:'CEX 보유', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'institutionalHold', label:'기관 보유', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'retailShare', label:'리테일 비중', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'avgWallet', label:'평균 지갑', fmt:fmt.usd},
+    {key:'newHolderShare', label:'신규 홀더', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'holdPeriodMedian', label:'중앙 보유기간', fmt:v=>v==null?na():v+'일'},
+    {key:'cdd', label:'CDD', fmt:fmt.num}
+  ]},
+  {key:'valuation', label:'밸류에이션 (주식)', cols:[
+    {key:'psr', label:'PSR', fmt:fmt.ratioK},
+    {key:'pf', label:'P/F', fmt:fmt.ratioK},
+    {key:'pbr', label:'PBR(MC/TVL)', fmt:fmt.ratioK},
+    {key:'peg', label:'PEG', fmt:v=>v==null?na():`<span class="${v<1?'up':v>3?'down':'warn'}">${v.toFixed(2)}</span>`},
+    {key:'evRev', label:'EV/Rev', fmt:fmt.ratioK},
+    {key:'ruleOf40', label:'Rule of 40', fmt:v=>v==null?na():`<span class="${v>=40?'up':v>=20?'warn':'down'}">${v.toFixed(0)}</span>`},
+    {key:'revYield', label:'Rev Yield', fmt:fmt.pct},
+    {key:'eps', label:'EPS(토큰당매출)', fmt:v=>v==null?na():v<0.01?'$'+v.toFixed(6):'$'+v.toFixed(4)},
+    {key:'opMargin', label:'영업이익률', fmt:fmt.pct},
+    {key:'roe', label:'ROE(Rev/TVL)', fmt:fmt.pct},
+    {key:'psrVsSector', label:'섹터 PSR 대비', fmt:fmt.ratio}
+  ]},
+  {key:'growth', label:'수익성/성장', cols:[
+    {key:'rev30d', label:'30d Rev', fmt:fmt.bigUSD},
+    {key:'revAnnual', label:'연환산 Rev', fmt:fmt.bigUSD},
+    {key:'fees30d', label:'30d Fees', fmt:fmt.bigUSD},
+    {key:'feesAnnual', label:'연환산 Fees', fmt:fmt.bigUSD},
+    {key:'revMom', label:'매출 MoM', fmt:fmt.pctSign},
+    {key:'revQoq', label:'매출 QoQ', fmt:fmt.pctSign},
+    {key:'revYoY', label:'매출 YoY', fmt:fmt.pctSign},
+    {key:'revCagr3y', label:'3년 CAGR', fmt:fmt.pctSign},
+    {key:'revGrowthStreak', label:'연속 성장', fmt:v=>v==null?na():`<span class="${v>=4?'up':v===0?'down':'neutral'}">${v}분기</span>`},
+    {key:'revCv', label:'매출 변동성', fmt:v=>v==null?na():`<span class="${v<0.3?'up':v>0.7?'down':'warn'}">${v.toFixed(2)}</span>`},
+    {key:'feesMom', label:'Fees MoM', fmt:fmt.pctSign},
+    {key:'tvlMom', label:'TVL MoM', fmt:fmt.pctSign},
+    {key:'stakeApy', label:'Stake APY', fmt:fmt.pct}
+  ]},
+  {key:'supply', label:'공급/희석', cols:[
+    {key:'circRatio', label:'유통비율', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'fdvMc', label:'FDV/MC', fmt:v=>v==null?na():`<span class="${v>=1.5?'down':v>=1.1?'warn':''}">${v.toFixed(2)}x</span>`},
+    {key:'maxSupply', label:'최대공급', fmt:fmt.num},
+    {key:'inflation', label:'인플레율 (연)', fmt:v=>v==null?na():`<span class="${v>0.05?'down':v<0?'up':''}">${(v>=0?'+':'')+(v*100).toFixed(2)+'%'}</span>`},
+    {key:'stake', label:'스테이킹 비율', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'realYield', label:'실질 수익률', fmt:v=>v==null?na():`<span class="${v>0.01?'up':v<0?'down':'neutral'}">${(v>=0?'+':'')+(v*100).toFixed(2)+'%'}</span>`},
+    {key:'realRevYield', label:'실질 Rev Yield', fmt:v=>v==null?na():`<span class="${v>0.01?'up':v<0?'down':'neutral'}">${(v>=0?'+':'')+(v*100).toFixed(2)+'%'}</span>`},
+    {key:'dilutionAdjReturn', label:'희석조정 1Y수익', fmt:fmt.pctSign},
+    {key:'unlock90d', label:'90d 언락', fmt:fmt.pct},
+    {key:'unlock180d', label:'180d 언락', fmt:fmt.pct},
+    {key:'teamHold', label:'팀/재단 보유', fmt:v=>v==null?na():(v*100).toFixed(1)+'%'},
+    {key:'burnCum', label:'누적 소각', fmt:fmt.num},
+    {key:'feePolicy', label:'수익금 정책', fmt:v=>v==null?na():`<span class="${v.includes('소각')?'up':v.includes('바이백')?'neutral':'down'}">${v}</span>`}
+  ]},
+  {key:'derivatives', label:'파생상품', cols:[
+    {key:'funding', label:'Funding (8h)', fmt:v=>v==null?na():`<span class="${v>0.01?'down':v<0?'up':'neutral'}">${(v*100).toFixed(3)}%</span>`},
+    {key:'oi', label:'OI', fmt:fmt.bigUSD},
+    {key:'oiMc', label:'OI/MC', fmt:fmt.pct},
+    {key:'ls', label:'L/S Ratio', fmt:v=>v==null?na():v.toFixed(2)},
+    {key:'perpBasis', label:'Perp Basis (연)', fmt:fmt.pct},
+    {key:'iv', label:'Options IV', fmt:fmt.pct}
+  ]},
+  {key:'flow', label:'거래소 흐름', cols:[
+    {key:'cexFlow7d', label:'CEX 순유입 7d', fmt:v=>v==null?na():`<span class="${v<0?'up':'down'}">${v>=0?'+':'−'}$${Math.abs(v)>=1e9?(Math.abs(v)/1e9).toFixed(2)+'B':(Math.abs(v)/1e6).toFixed(0)+'M'}</span>`},
+    {key:'cexFlow30d', label:'CEX 순유입 30d', fmt:v=>v==null?na():`<span class="${v<0?'up':'down'}">${v>=0?'+':'−'}$${Math.abs(v)>=1e9?(Math.abs(v)/1e9).toFixed(2)+'B':(Math.abs(v)/1e6).toFixed(0)+'M'}</span>`},
+    {key:'cexHoldMom', label:'CEX 보유 MoM', fmt:v=>fmt.pctColor(v,'down')},
+    {key:'stableInflow', label:'스테이블 CEX 유입', fmt:fmt.bigUSD}
+  ]},
+  {key:'etf', label:'기관/ETF', cols:[
+    {key:'etfFlow7d', label:'ETF 유입 7d', fmt:fmt.bigUSD},
+    {key:'etfCum', label:'ETF 누적', fmt:fmt.bigUSD},
+    {key:'etfAumMc', label:'ETF AUM/MC', fmt:fmt.pct},
+    {key:'kimchi', label:'김프', fmt:v=>v==null?na():`<span class="${v>0.03?'down':v>0.01?'warn':'neutral'}">+${(v*100).toFixed(1)}%</span>`}
+  ]},
+  {key:'dev', label:'개발', cols:[
+    {key:'activeDevs', label:'Active Devs', fmt:fmt.num},
+    {key:'coreDevs', label:'Core Devs', fmt:fmt.num},
+    {key:'ftDevs', label:'Full-time', fmt:fmt.num},
+    {key:'devMom', label:'개발자 MoM', fmt:fmt.pctSign},
+    {key:'contributors', label:'Contributors', fmt:fmt.num},
+    {key:'pr4w', label:'PR 4w', fmt:fmt.num},
+    {key:'stars', label:'Stars', fmt:fmt.num},
+    {key:'commits4w', label:'Commits 4w', fmt:fmt.num}
+  ]},
+  {key:'social', label:'소셜', cols:[
+    {key:'xMom', label:'X 언급 MoM', fmt:fmt.pctSign},
+    {key:'reddit', label:'Reddit', fmt:fmt.num},
+    {key:'redditMom', label:'Reddit MoM', fmt:fmt.pctSign},
+    {key:'gtrends', label:'Google Trends', fmt:v=>v==null?na():v},
+    {key:'gtrendsMom', label:'검색 MoM', fmt:fmt.pctSign},
+    {key:'news4w', label:'뉴스 4w', fmt:fmt.num},
+    {key:'lunarcrush', label:'LunarCrush', fmt:v=>v==null?na():v},
+    {key:'telegram', label:'Telegram', fmt:fmt.num},
+    {key:'watchlist', label:'Watchlist', fmt:fmt.num},
+    {key:'sentiment', label:'센티먼트 ↑', fmt:fmt.pct}
+  ]},
+  {key:'smart', label:'스마트머니', cols:[
+    {key:'smartMoney7d', label:'SM 순매수 7d', fmt:v=>v==null?na():`<span class="${v>0?'up':'down'}">${v>=0?'+':'−'}$${Math.abs(v)>=1e9?(Math.abs(v)/1e9).toFixed(2)+'B':(Math.abs(v)/1e6).toFixed(0)+'M'}</span>`},
+    {key:'whale7d', label:'고래 순매수 7d', fmt:v=>v==null?na():`<span class="${v>0?'up':'down'}">${v>=0?'+':'−'}$${Math.abs(v)>=1e9?(Math.abs(v)/1e9).toFixed(2)+'B':(Math.abs(v)/1e6).toFixed(0)+'M'}</span>`},
+    {key:'whaleWallets', label:'고래 지갑 증감', fmt:v=>v==null?na():`<span class="${v>0?'up':'down'}">${v>=0?'+':''}${v}</span>`}
+  ]},
+  {key:'technical', label:'기술적', cols:[
+    {key:'rsi', label:'RSI (14d)', fmt:fmt.rsi},
+    {key:'macd', label:'MACD', fmt:fmt.macd},
+    {key:'ma200', label:'200d MA', fmt:fmt.pctSign},
+    {key:'ma50', label:'50d MA', fmt:fmt.pctSign},
+    {key:'bbp', label:'볼린저 %B', fmt:v=>v==null?na():v.toFixed(2)},
+    {key:'atr', label:'ATR', fmt:fmt.usd}
+  ]},
+  {key:'riskAdj', label:'리스크 조정', cols:[
+    {key:'sortino', label:'Sortino', fmt:v=>v==null?na():`<span class="${v>0.5?'up':v<0?'down':'neutral'}">${v.toFixed(2)}</span>`},
+    {key:'calmar', label:'Calmar', fmt:v=>v==null?na():`<span class="${v>0.5?'up':v<0?'down':'neutral'}">${v.toFixed(2)}</span>`},
+    {key:'infoRatio', label:'Info Ratio', fmt:v=>v==null?na():`<span class="${v>0.5?'up':v<0?'down':'neutral'}">${v.toFixed(2)}</span>`},
+    {key:'alpha', label:'Alpha', fmt:fmt.pctSign},
+    {key:'var95', label:'VaR 95%', fmt:fmt.pctSign}
+  ]},
+  {key:'liquidity', label:'유동성 품질', cols:[
+    {key:'bidAskSpread', label:'Bid-Ask 스프레드', fmt:v=>v==null?na():(v*10000).toFixed(1)+' bp'},
+    {key:'slippage1m', label:'$1M 슬리피지', fmt:v=>v==null?na():`<span class="${v>0.005?'down':v>0.002?'warn':'up'}">${(v*100).toFixed(3)}%</span>`},
+    {key:'obDepth2pct', label:'Depth ±2%', fmt:fmt.bigUSD},
+    {key:'amihud', label:'Amihud 비유동성', fmt:v=>v==null?na():`<span class="${v<0.5?'up':v>2?'down':'warn'}">${v.toFixed(2)}</span>`}
+  ]},
+  {key:'regulation', label:'상장 현황', cols:[
+    {key:'upbit', label:'업비트', fmt:fmt.flag},
+    {key:'bithumb', label:'빗썸', fmt:fmt.flag},
+    {key:'globalExchanges', label:'글로벌 거래소', fmt:fmt.num}
+  ]},
+  {key:'macro', label:'매크로', cols:[
+    {key:'marketShare', label:'시장 점유율', fmt:v=>v==null?na():(v*100).toFixed(2)+'%'},
+    {key:'corrBtc90d', label:'BTC 상관 90d', fmt:fmt.ratio},
+    {key:'corrEth90d', label:'ETH 상관 90d', fmt:fmt.ratio},
+    {key:'corrSpx90d', label:'SPX 상관 90d', fmt:fmt.ratio},
+    {key:'btcBeta90d', label:'BTC β 90d', fmt:fmt.ratio}
+  ]},
+  {key:'catalyst', label:'촉매/이벤트', cols:[
+    {key:'nextUnlockDate', label:'다음 언락', fmt:v=>v==null?na():`<span class="txt">${v}</span>`},
+    {key:'nextUnlockDays', label:'D-day', fmt:v=>v==null?na():`<span class="${v<30?'down':v<90?'warn':'neutral'}">D-${v}</span>`},
+    {key:'nextUnlockPct', label:'언락 물량', fmt:v=>v==null?na():`<span class="${v>0.03?'down':v>0.01?'warn':''}">${(v*100).toFixed(2)}%</span>`},
+    {key:'halvingDays', label:'반감기 D-day', fmt:v=>v==null?na():'D-'+v}
+  ]},
+  {key:'ecosystem', label:'생태계', cols:[
+    {key:'dappCount', label:'dApp 수', fmt:fmt.num},
+    {key:'topDappShare', label:'TOP10 점유', fmt:v=>v==null?na():(v*100).toFixed(0)+'%'},
+    {key:'stableOnChainMc', label:'체인 위 Stable MC', fmt:fmt.bigUSD},
+    {key:'topDappName', label:'1위 dApp', fmt:v=>v==null?na():`<span class="txt">${v}</span>`},
+    {key:'topDappDau', label:'1위 DAU', fmt:fmt.num},
+    {key:'chainFeeShare', label:'수수료 점유율', fmt:fmt.pct},
+    {key:'bridgeInflow30d', label:'브릿지 유입 30d', fmt:fmt.bigUSD},
+    {key:'nftVolume30d', label:'NFT 거래 30d', fmt:fmt.bigUSD}
+  ]}
+];
+
+// ============================================================================
+// 렌더링 + 인터랙션
+// ============================================================================
+let state = {
+  tab:'overview',
+  sector:'all',
+  sortCol:null,
+  sortDir:'desc'
+};
+
+function tierClass(moat){return moat==='Wide'?'w':moat==='Narrow'?'n':moat==='None'?'x':'no'}
+function sectorClass(s){return s}
+
+function renderTabs(){
+  const el = document.getElementById('tabs');
+  el.innerHTML = TABS.map(t=>
+    `<button class="tab ${t.key===state.tab?'active':''}" data-tab="${t.key}">${t.label}<span class="count">${t.cols.length}</span></button>`
+  ).join('');
+  el.querySelectorAll('.tab').forEach(b=>{
+    b.onclick=()=>{state.tab=b.dataset.tab;state.sortCol=null;render()};
+  });
+}
+
+function getVisible(){
+  return COINS.filter(c=>
+    (state.sector==='all'||c.sector===state.sector)
+  );
+}
+
+function render(){
+  renderTabs();
+  const tab = TABS.find(t=>t.key===state.tab);
+  const visible = getVisible();
+
+  // 정렬
+  let rows = [...visible];
+  if(state.sortCol){
+    rows.sort((a,b)=>{
+      const av=a[state.sortCol], bv=b[state.sortCol];
+      if(av==null && bv==null) return 0;
+      if(av==null) return 1;
+      if(bv==null) return -1;
+      const dir = state.sortDir==='desc'?-1:1;
+      if(typeof av==='number') return (av-bv)*dir;
+      return String(av).localeCompare(String(bv))*dir;
+    });
+  }
+
+  // 헤더 — 고정 컬럼 + 탭 컬럼
+  const thead = `<tr>
+    <th class="sc s0" data-desc="시가총액 전체 순위. TOP3 진한 파랑, TOP10 연한 파랑, 그 외 회색.">순위</th>
+    <th class="sc s1">코인</th>
+    ${tab.cols.map(c=>`<th data-sort="${c.key}" ${DESC[c.key]?`data-desc="${DESC[c.key]}"`:''} class="${state.sortCol===c.key?'sorted':''}">${c.label}<span class="arrow">${state.sortCol===c.key?(state.sortDir==='desc'?'▼':'▲'):'↕'}</span></th>`).join('')}
+  </tr>`;
+  document.getElementById('thead').innerHTML = thead;
+
+  // 바디
+  if(rows.length===0){
+    document.getElementById('tbody').innerHTML = `<tr><td colspan="${tab.cols.length+2}" class="no-data">조건에 맞는 코인이 없습니다.</td></tr>`;
+  } else {
+    document.getElementById('tbody').innerHTML = rows.map(c=>`<tr>
+      <td class="sc s0"><span class="rank${c.rank<=3?' top3':c.rank<=10?' top10':''}">#${c.rank}</span></td>
+      <td class="sc s1"><div class="cn">${c.name}</div><div class="coin-meta"><span class="sym">${c.symbol}</span>· ${c.sector}</div></td>
+      ${tab.cols.map(col=>`<td>${col.fmt(c[col.key])}</td>`).join('')}
+    </tr>`).join('');
+  }
+
+  // 정렬 이벤트
+  document.querySelectorAll('#thead th[data-sort]').forEach(th=>{
+    th.onclick=()=>{
+      const k=th.dataset.sort;
+      if(state.sortCol===k) state.sortDir = state.sortDir==='desc'?'asc':'desc';
+      else {state.sortCol=k; state.sortDir='desc';}
+      render();
+    };
+  });
+
+  // 카운트
+  document.getElementById('visibleCount').textContent =
+    `${visible.length}/${COINS.length}개 코인 · ${tab.cols.length}개 지표 · ${tab.label}`;
+}
+
+// 필터 버튼
+document.querySelectorAll('.chip').forEach(c=>{
+  c.onclick=()=>{
+    if(c.dataset.sector!==undefined){
+      document.querySelectorAll('[data-sector]').forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');
+      state.sector = c.dataset.sector;
+    }
+    render();
+  };
+});
+
+render();
+
+// ============================================================================
+// 헤더 호버 툴팁
+// ============================================================================
+const tt = document.createElement('div');
+tt.id = 'tooltip';
+document.body.appendChild(tt);
+
+document.addEventListener('mouseover', e => {
+  const th = e.target.closest('th[data-desc]');
+  if (!th || !th.dataset.desc) return;
+  tt.innerHTML = th.dataset.desc;
+  tt.classList.add('show');
+  // 위치 계산 (th 중앙 하단, 화면 밖 넘어가면 클램프)
+  const r = th.getBoundingClientRect();
+  const ttR = tt.getBoundingClientRect();
+  const thCenter = r.left + r.width/2;
+  let left = thCenter - ttR.width/2;
+  const pad = 8;
+  left = Math.max(pad, Math.min(left, window.innerWidth - pad - ttR.width));
+  tt.style.left = left + 'px';
+  tt.style.top = (r.bottom + 10) + 'px';
+  // 화살표 위치 = th 중앙 기준 보정
+  const arrowX = thCenter - left;
+  tt.style.setProperty('--arrow-x', arrowX + 'px');
+});
+document.addEventListener('mouseout', e => {
+  if (e.target.closest('th[data-desc]')) {
+    tt.classList.remove('show');
+  }
+});
+</script>
+</body>
+</html>
