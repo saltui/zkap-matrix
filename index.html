@@ -1815,18 +1815,6 @@ function renderMockup(){
       </div>
 
     </div></div>
-
-    <div class="mockup-legend">
-      <h3>화면 설계 — 토스 스타일 3원칙</h3>
-      <div class="legend-grid">
-        <div class="lg-item"><b>1. 질문형 카드</b><p>PSR·MVRV 같은 용어 대신 "실제로 돈 벌어요?" 같은 질문 → 바로 답.</p></div>
-        <div class="lg-item"><b>2. 비유와 맥락</b><p>"회사로 치면 대기업 매출", "은행 예금처럼" 같은 일상 비유.</p></div>
-        <div class="lg-item"><b>3. 숫자 + 원화 병기</b><p>달러 가격 옆에 원화 추정치. 체감 가능한 단위로.</p></div>
-        <div class="lg-item"><b>요약 배너</b><p>5가지 축의 가장 중요한 신호 하나만 최상단. 나머지는 카드로 깊이 있게.</p></div>
-        <div class="lg-item"><b>차트 · 상세</b><p>1일~전체 기간 선택. 앱 코인 상세의 기본. 누구나 보는 것.</p></div>
-        <div class="lg-item"><b>앞으로 일정</b><p>언락·업그레이드·뉴스를 타임라인으로. "언제 뭐가 있을지" 직관적.</p></div>
-      </div>
-    </div>
   `;
 
   view.querySelectorAll('[data-coin]').forEach(b=>{
@@ -1845,6 +1833,7 @@ function render(){
   const $filter = document.querySelector('.filter-bar');
   const $tabs = document.getElementById('tabs');
   const $mockup = document.getElementById('mockupView');
+  const $footer = document.querySelector('.footer');
   const setDisp = (el, val) => { if (el) el.style.display = val; };
 
   if(state.section==='mockup'){
@@ -1853,6 +1842,7 @@ function render(){
     setDisp($macro, 'none');
     setDisp($filter, 'none');
     setDisp($tabs, 'none');
+    setDisp($footer, 'none');
     setDisp($mockup, 'block');
     renderMockup();
     return;
@@ -1862,6 +1852,7 @@ function render(){
   setDisp($macro, 'grid');
   setDisp($filter, 'flex');
   setDisp($tabs, 'flex');
+  setDisp($footer, 'block');
   setDisp($mockup, 'none');
 
   const visible = getVisible();
