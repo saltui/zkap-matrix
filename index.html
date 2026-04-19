@@ -292,6 +292,123 @@ a.src-card:hover::after{opacity:1;color:var(--primary)}
 #visibleCount{font-weight:600}
 .legend{display:flex;gap:14px;align-items:center;font-size:12px;color:var(--text-3);font-weight:500}
 .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
+
+/* ============================================================
+   APP 목업 화면
+   ============================================================ */
+.mockup-view{display:none;padding:12px 0 24px}
+.mockup-intro{text-align:center;margin-bottom:20px;padding:0 20px}
+.mockup-intro h2{font-size:22px;color:var(--text);margin-bottom:6px;font-weight:800;letter-spacing:-0.02em}
+.mockup-intro p{color:var(--text-3);font-size:14px;font-weight:500}
+.mockup-intro .coin-picker{display:inline-flex;gap:6px;margin-top:14px;background:var(--surface);padding:4px;border-radius:12px;box-shadow:var(--shadow)}
+.mockup-intro .coin-picker button{
+  background:transparent;border:none;padding:8px 14px;border-radius:8px;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--text-3);transition:all .15s
+}
+.mockup-intro .coin-picker button.active{background:var(--primary);color:#fff}
+.mockup-intro .coin-picker button:hover:not(.active){background:var(--border-soft);color:var(--text)}
+
+.phone{
+  width:380px;margin:0 auto;
+  background:#0a0a10;border-radius:44px;padding:12px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25),0 0 0 2px rgba(255,255,255,.04);
+  position:relative
+}
+.phone::before{
+  content:'';position:absolute;top:20px;left:50%;transform:translateX(-50%);
+  width:110px;height:28px;background:#0a0a10;border-radius:999px;z-index:10
+}
+.phone-screen{
+  background:var(--surface);border-radius:32px;overflow:hidden;
+  height:760px;overflow-y:auto;position:relative
+}
+.phone-screen::-webkit-scrollbar{width:0}
+
+.app-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:52px 20px 12px;font-size:17px;font-weight:700
+}
+.app-header .back,.app-header .star-ico{color:var(--text-2);font-size:20px;cursor:pointer}
+
+.price-section{padding:16px 20px 20px;text-align:center}
+.coin-icon{
+  width:60px;height:60px;margin:0 auto 10px;color:#fff;font-size:28px;font-weight:800;
+  border-radius:50%;display:flex;align-items:center;justify-content:center
+}
+.coin-icon.eth{background:linear-gradient(135deg,#627EEA 0%,#8A92B2 100%)}
+.coin-icon.btc{background:linear-gradient(135deg,#F7931A 0%,#FFB75E 100%)}
+.coin-icon.trx{background:linear-gradient(135deg,#FF0013 0%,#FF6B6B 100%)}
+.coin-name-lg{font-size:15px;color:var(--text);font-weight:700}
+.coin-symbol-lg{font-size:12px;color:var(--primary);font-weight:700;margin-bottom:8px}
+.price{font-size:36px;font-weight:800;color:var(--text);letter-spacing:-0.03em;margin-bottom:6px;font-variant-numeric:tabular-nums}
+.price-change{font-size:13px;font-weight:600}
+.price-change .sep{color:var(--text-4);margin:0 6px}
+
+.signal-card{
+  margin:6px 16px 12px;padding:14px 16px;border-radius:14px;
+  display:flex;gap:12px;align-items:flex-start
+}
+.signal-card.positive{background:var(--up-soft)}
+.signal-card.warning{background:var(--warn-soft)}
+.signal-card.danger{background:var(--down-soft)}
+.signal-card .signal-icon{font-size:22px;line-height:1.1}
+.signal-card .signal-body{flex:1}
+.signal-card .signal-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;line-height:1.3}
+.signal-card .signal-sub{font-size:12px;color:var(--text-2);line-height:1.4}
+
+.app-section{padding:16px 20px;border-top:8px solid var(--bg)}
+.app-section:first-of-type{border-top:none}
+.section-label{font-size:11px;color:var(--text-3);font-weight:700;letter-spacing:.3px;margin-bottom:10px}
+
+.sector-badge{display:inline-block;padding:4px 10px;background:var(--primary-soft);color:var(--primary);border-radius:999px;font-size:12px;font-weight:700;margin-bottom:8px}
+.sector-desc{font-size:14px;color:var(--text);line-height:1.45;margin-bottom:6px;font-weight:500}
+.sector-rank{font-size:13px;color:var(--text-2);font-weight:500}
+.sector-rank b{color:var(--primary);font-weight:700}
+
+.moat-badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:12px}
+.moat-badge.wide{background:var(--up);color:#fff}
+.moat-badge.narrow{background:var(--warn);color:#fff}
+.moat-badge.none{background:var(--border-soft);color:var(--text-3)}
+.moat-reason{display:flex;flex-direction:column;gap:10px}
+.moat-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text);line-height:1.4}
+.moat-item .moat-icon{font-size:16px;width:20px;text-align:center}
+.moat-item b{font-weight:700}
+.moat-item .mi-desc{color:var(--text-2);font-size:12px;margin-top:2px}
+
+.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.kpi{background:var(--surface-hover);padding:12px;border-radius:12px;border-left:3px solid var(--border)}
+.kpi.up{border-left-color:var(--up)}
+.kpi.down{border-left-color:var(--down)}
+.kpi.warn{border-left-color:var(--warn)}
+.kpi-label{font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:4px}
+.kpi-value{font-size:17px;font-weight:800;color:var(--text);margin-bottom:2px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
+.kpi-sub{font-size:11px;color:var(--text-2);font-weight:500}
+
+.risk-card{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px}
+.risk-card.warn{background:var(--warn-soft)}
+.risk-card.danger{background:var(--down-soft)}
+.risk-card .risk-icon{font-size:18px;line-height:1.1}
+.risk-card .risk-text{font-size:13px;color:var(--text);line-height:1.4;flex:1;font-weight:500}
+
+.event-card{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border-soft)}
+.event-card:last-child{border-bottom:none}
+.event-date{font-size:11px;color:var(--primary);font-weight:700;min-width:44px;text-align:center;background:var(--primary-soft);padding:6px 4px;border-radius:8px;line-height:1.1}
+.event-text{flex:1}
+.event-text b{font-size:14px;color:var(--text);display:block;margin-bottom:3px;font-weight:700}
+.event-text .sub{font-size:12px;color:var(--text-3);line-height:1.4}
+
+.app-cta{display:flex;gap:8px;padding:14px 16px 24px;border-top:1px solid var(--border-soft)}
+.app-cta button{flex:1;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:-0.01em}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:#2068d8}
+.btn-secondary{background:var(--surface-hover);color:var(--text-2)}
+
+.mockup-legend{max-width:800px;margin:28px auto 0;padding:24px 28px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
+.mockup-legend h3{font-size:16px;color:var(--text);margin-bottom:14px;font-weight:800}
+.legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
+.legend-grid .lg-item{padding:12px 14px;background:var(--surface-hover);border-radius:10px}
+.legend-grid b{color:var(--text);font-size:13px;display:block;margin-bottom:4px;font-weight:700}
+.legend-grid p{color:var(--text-2);font-size:12px;line-height:1.5;margin:0}
 </style>
 </head>
 <body>
@@ -319,6 +436,7 @@ a.src-card:hover::after{opacity:1;color:var(--primary)}
 </div>
 </div>
 
+<div class="mockup-view" id="mockupView"></div>
 <div class="tw"><table id="dataTable"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
 
 <div class="footer">
@@ -1010,6 +1128,7 @@ const DESC = {
 // 탭 정의. 각 탭 = { key, label, cols:[...] }
 // cols: { key:데이터키, label:컬럼명, fmt:포맷터함수, w:최소너비 }
 const TABS = [
+  {key:'mockup', label:'📱 앱 목업', cols:[]},
   {key:'overview', label:'개요', cols:[
     {key:'rank', label:'#', fmt:v=>'#'+v},
     {key:'mc', label:'시총', fmt:fmt.bigUSD},
@@ -1215,10 +1334,11 @@ const TABS = [
 // 렌더링 + 인터랙션
 // ============================================================================
 let state = {
-  tab:'overview',
+  tab:'mockup',
   sector:'all',
   sortCol:null,
-  sortDir:'desc'
+  sortDir:'desc',
+  mockupCoin:'ETH'
 };
 
 function tierClass(moat){return moat==='Wide'?'w':moat==='Narrow'?'n':moat==='None'?'x':'no'}
@@ -1240,9 +1360,236 @@ function getVisible(){
   );
 }
 
+function renderMockup(){
+  const mockups = {
+    ETH: {
+      cls:'eth', iconChar:'◆', name:'Ethereum', symbol:'ETH',
+      price:'$2,260.45', p30d:'+13.5%', p30dCls:'up', p1y:'-49.6%', p1yCls:'down',
+      signalType:'positive', signalIcon:'💡',
+      signalTitle:'SaaS로 치면 우량 기업 수준',
+      signalSub:'Rule of 40 = 47 (매출 성장 +28% + 영업이익률 19%)',
+      sector:'L1 플랫폼',
+      sectorDesc:'스마트 컨트랙트의 표준. 가장 많은 dApp이 돌아가는 플랫폼.',
+      sectorRank:'L1 중 수수료 수익 · TVL <b>1위</b>',
+      moat:'Wide', moatClass:'wide',
+      moat1Icon:'🔗', moat1Title:'전환비용', moat1Desc:'EVM 개발자·dApp 락인, 재구축 비용 막대',
+      moat2Icon:'🌐', moat2Title:'네트워크 효과', moat2Desc:'TVL $55B · dApp 4,200개',
+      kpis:[
+        {cls:'up', label:'📈 연 매출', val:'$22.3B', sub:'PSR 12.2x · 우량'},
+        {cls:'warn', label:'👥 일 활성 사용자', val:'450K', sub:'전월비 -8%'},
+        {cls:'up', label:'👨‍💻 개발자', val:'2,800', sub:'전체 1위 · +4% MoM'},
+        {cls:'up', label:'🔓 희석 리스크', val:'낮음', sub:'FDV/MC 1.00x · 소각 中'},
+        {cls:'up', label:'💧 유동성', val:'최상', sub:'기관급 · Bid-Ask 0.8bp'},
+        {cls:'up', label:'💰 실질 수익', val:'연 +2.5%', sub:'스테이킹 2.4% + 디플레'}
+      ],
+      risks:[
+        {cls:'warn', icon:'⚠️', text:'최근 30일 활성 사용자가 8% 감소 중 — 네트워크 사용량 모니터링 필요'}
+      ],
+      events:[
+        {date:'05/15', title:'Pectra Phase 2 업그레이드', sub:'검증자 보상 구조 변경 · D-26'},
+        {date:'📰', title:'ETH ETF 순유입 +$42M (7일)', sub:'기관 관심 유지되는 중'}
+      ]
+    },
+    BTC: {
+      cls:'btc', iconChar:'₿', name:'Bitcoin', symbol:'BTC',
+      price:'$70,700', p30d:'+6.6%', p30dCls:'up', p1y:'-9.7%', p1yCls:'down',
+      signalType:'positive', signalIcon:'💎',
+      signalTitle:'1년 넘게 안 팔고 들고 있는 사람이 68%예요',
+      signalSub:'장기 보유자가 압도적 다수 — 매도 압력 낮음',
+      sector:'가치저장 (디지털 금)',
+      sectorDesc:'송금·결제보다 "보유"가 목적. 희소성과 네트워크 안정이 가치의 원천.',
+      sectorRank:'시총 <b>전체 1위</b> · 해시파워 <b>1위</b>',
+      moat:'Wide', moatClass:'wide',
+      moat1Icon:'🏅', moat1Title:'무형자산', moat1Desc:'"디지털 금" 브랜드, ETF 승인된 유일 암호자산',
+      moat2Icon:'⚡', moat2Title:'네트워크 효과', moat2Desc:'해시파워 격차로 후발 진입 불가',
+      kpis:[
+        {cls:'up', label:'💎 장기 홀더', val:'74.2%', sub:'1y+ HODLer 68%'},
+        {cls:'up', label:'⚡ 해시레이트', val:'ATH 수준', sub:'네트워크 보안 최강'},
+        {cls:'up', label:'📊 MVRV', val:'1.80', sub:'과열 아님 (3.5 이상 과열)'},
+        {cls:'up', label:'🔓 희석 리스크', val:'없음', sub:'인플레 0.85% · 반감기 예정'},
+        {cls:'up', label:'💧 유동성', val:'최상', sub:'전 코인 중 1위'},
+        {cls:'up', label:'🏛️ ETF 보유', val:'$54B', sub:'시총 대비 3.9%'}
+      ],
+      risks:[],
+      events:[
+        {date:'07/15', title:'다음 반감기 D-3년', sub:'공급 감소 예정 이벤트'},
+        {date:'📰', title:'BTC ETF 순유입 +$1.2B (7일)', sub:'기관 수요 지속'}
+      ]
+    },
+    TRX: {
+      cls:'trx', iconChar:'T', name:'TRON', symbol:'TRX',
+      price:'$0.316', p30d:'+9.7%', p30dCls:'up', p1y:'+35.9%', p1yCls:'up',
+      signalType:'positive', signalIcon:'🚀',
+      signalTitle:'회사로 치면 성장도 빠르고 돈도 잘 벌어요',
+      signalSub:'Rule of 40 = 135 · 8분기 연속 매출 성장',
+      sector:'L1 플랫폼 (USDT 특화)',
+      sectorDesc:'USDT 송금의 70%가 돌아가는 네트워크. 저비용 고속 송금 전문.',
+      sectorRank:'L1 중 수수료 수익 <b>2위</b> · USDT 점유 <b>1위</b>',
+      moat:'Narrow', moatClass:'narrow',
+      moat1Icon:'🌐', moat1Title:'네트워크 효과', moat1Desc:'USDT 기본 결제망 자리잡음',
+      moat2Icon:'💸', moat2Title:'비용 우위', moat2Desc:'수수료 무료 송금 가능한 구조',
+      kpis:[
+        {cls:'up', label:'📈 연 매출', val:'$346M', sub:'PSR 87x · YoY +35%'},
+        {cls:'up', label:'👥 일 활성 사용자', val:'2.4M', sub:'L1 중 1위'},
+        {cls:'warn', label:'👨‍💻 개발자', val:'85', sub:'-2% MoM (작은 편)'},
+        {cls:'up', label:'🔓 희석 리스크', val:'낮음', sub:'FDV/MC 1.00x · 소각 中'},
+        {cls:'warn', label:'💧 유동성', val:'양호', sub:'Bid-Ask 3bp'},
+        {cls:'up', label:'💰 실질 수익', val:'연 +4.0%', sub:'스테이킹 4% · 인플레 0%'}
+      ],
+      risks:[
+        {cls:'warn', icon:'⚠️', text:'Justin Sun 평판 리스크 · SEC 소송 진행 중'}
+      ],
+      events:[
+        {date:'07/15', title:'Stellar Reset 업그레이드', sub:'네트워크 최적화 예정'}
+      ]
+    }
+  };
+  const m = mockups[state.mockupCoin] || mockups.ETH;
+  const coin = COINS.find(c=>c.symbol===state.mockupCoin);
+
+  const view = document.getElementById('mockupView');
+  view.innerHTML = `
+    <div class="mockup-intro">
+      <h2>📱 ZKAP 코인 상세 화면 — 목업</h2>
+      <p>MVP 제안 (공통 2 + 섹터별 3 + 조건부 시그널)이 실제 앱에서 어떻게 보일지.</p>
+      <div class="coin-picker">
+        ${['ETH','BTC','TRX'].map(s=>`<button class="${s===state.mockupCoin?'active':''}" data-coin="${s}">${s}</button>`).join('')}
+      </div>
+    </div>
+
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="app-header">
+          <span class="back">〈</span>
+          <span>상세</span>
+          <span class="star-ico">☆</span>
+        </div>
+
+        <div class="price-section">
+          <div class="coin-icon ${m.cls}">${m.iconChar}</div>
+          <div class="coin-name-lg">${m.name}</div>
+          <div class="coin-symbol-lg">${m.symbol}</div>
+          <div class="price">${m.price}</div>
+          <div class="price-change">
+            <span class="${m.p30dCls}">${m.p30d} (30일)</span>
+            <span class="sep">·</span>
+            <span class="${m.p1yCls}">${m.p1y} (1년)</span>
+          </div>
+        </div>
+
+        <div class="signal-card ${m.signalType}">
+          <div class="signal-icon">${m.signalIcon}</div>
+          <div class="signal-body">
+            <div class="signal-title">${m.signalTitle}</div>
+            <div class="signal-sub">${m.signalSub}</div>
+          </div>
+        </div>
+
+        <div class="app-section">
+          <div class="section-label">섹터 · 포지셔닝</div>
+          <div class="sector-badge">${m.sector}</div>
+          <div class="sector-desc">${m.sectorDesc}</div>
+          <div class="sector-rank">${m.sectorRank}</div>
+        </div>
+
+        <div class="app-section">
+          <div class="section-label">경제적 해자 (Moat)</div>
+          <div class="moat-badge ${m.moatClass}">${m.moat} Moat</div>
+          <div class="moat-reason">
+            <div class="moat-item">
+              <span class="moat-icon">${m.moat1Icon}</span>
+              <div><b>${m.moat1Title}</b><div class="mi-desc">${m.moat1Desc}</div></div>
+            </div>
+            <div class="moat-item">
+              <span class="moat-icon">${m.moat2Icon}</span>
+              <div><b>${m.moat2Title}</b><div class="mi-desc">${m.moat2Desc}</div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="app-section">
+          <div class="section-label">핵심 지표</div>
+          <div class="kpi-grid">
+            ${m.kpis.map(k=>`
+              <div class="kpi ${k.cls}">
+                <div class="kpi-label">${k.label}</div>
+                <div class="kpi-value">${k.val}</div>
+                <div class="kpi-sub">${k.sub}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        ${m.risks.length?`
+        <div class="app-section">
+          <div class="section-label">주의할 점</div>
+          ${m.risks.map(r=>`
+            <div class="risk-card ${r.cls}">
+              <div class="risk-icon">${r.icon}</div>
+              <div class="risk-text">${r.text}</div>
+            </div>
+          `).join('')}
+        </div>`:''}
+
+        <div class="app-section">
+          <div class="section-label">앞으로 · 촉매</div>
+          ${m.events.map(e=>`
+            <div class="event-card">
+              <div class="event-date">${e.date}</div>
+              <div class="event-text">
+                <b>${e.title}</b>
+                <div class="sub">${e.sub}</div>
+              </div>
+            </div>
+          `).join('')}
+        </div>
+
+        <div class="app-cta">
+          <button class="btn-secondary">알림 설정</button>
+          <button class="btn-primary">구매하기</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mockup-legend">
+      <h3>이 화면의 설계 — 3인 관점 결합</h3>
+      <div class="legend-grid">
+        <div class="lg-item"><b>① 시그널 카드</b><p>조건부 시그널 1개 (박종인 시그널 룰북). 임계치 충족 시 최상단 노출.</p></div>
+        <div class="lg-item"><b>② 섹터 · 포지셔닝</b><p>이진수님·한동근님 안의 공통 1번 섹션. "이게 뭐하는 코인?"</p></div>
+        <div class="lg-item"><b>③ 경제적 해자</b><p>한동근님 Moat 프레임. Wide/Narrow/None + 핵심 해자 2개.</p></div>
+        <div class="lg-item"><b>④ 핵심 지표 6개</b><p>박종인 MVP: 공통 2 (희석·유동성) + 섹터별 3~4 (섹터 따라 구성).</p></div>
+        <div class="lg-item"><b>⑤ 주의할 점</b><p>이진수님 리스크 섹션. 희석·운영 신뢰·경쟁 리스크 등.</p></div>
+        <div class="lg-item"><b>⑥ 앞으로</b><p>이진수님·한동근님의 촉매·뉴스. 다가올 이벤트 카드.</p></div>
+      </div>
+    </div>
+  `;
+
+  // 코인 선택 버튼
+  view.querySelectorAll('[data-coin]').forEach(b=>{
+    b.onclick=()=>{state.mockupCoin=b.dataset.coin;renderMockup();};
+  });
+}
+
 function render(){
   renderTabs();
   const tab = TABS.find(t=>t.key===state.tab);
+
+  // 목업 탭 처리
+  if(state.tab==='mockup'){
+    document.querySelector('.tw').style.display='none';
+    document.querySelector('.meta-row').style.display='none';
+    document.querySelector('.macro-banner').style.display='none';
+    document.querySelector('.filter-bar').style.display='none';
+    document.getElementById('mockupView').style.display='block';
+    renderMockup();
+    return;
+  }
+  document.querySelector('.tw').style.display='block';
+  document.querySelector('.meta-row').style.display='flex';
+  document.querySelector('.macro-banner').style.display='grid';
+  document.querySelector('.filter-bar').style.display='flex';
+  document.getElementById('mockupView').style.display='none';
+
   const visible = getVisible();
 
   // 정렬
