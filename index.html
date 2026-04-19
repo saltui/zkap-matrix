@@ -314,115 +314,171 @@ a.src-card:hover::after{opacity:1;color:var(--primary)}
 .legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:middle}
 
 /* ============================================================
-   APP 목업 화면
+   APP 목업 (토스 스타일)
    ============================================================ */
 .mockup-view{display:none;padding:12px 0 24px}
 .mockup-intro{text-align:center;margin-bottom:20px;padding:0 20px}
 .mockup-intro h2{font-size:22px;color:var(--text);margin-bottom:6px;font-weight:800;letter-spacing:-0.02em}
 .mockup-intro p{color:var(--text-3);font-size:14px;font-weight:500}
-.mockup-intro .coin-picker{display:inline-flex;gap:6px;margin-top:14px;background:var(--surface);padding:4px;border-radius:12px;box-shadow:var(--shadow)}
-.mockup-intro .coin-picker button{
+.coin-picker{display:inline-flex;gap:6px;margin-top:14px;background:var(--surface);padding:4px;border-radius:12px;box-shadow:var(--shadow)}
+.coin-picker button{
   background:transparent;border:none;padding:8px 14px;border-radius:8px;
   font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;color:var(--text-3);transition:all .15s
 }
-.mockup-intro .coin-picker button.active{background:var(--primary);color:#fff}
-.mockup-intro .coin-picker button:hover:not(.active){background:var(--border-soft);color:var(--text)}
+.coin-picker button.active{background:var(--primary);color:#fff}
+.coin-picker button:hover:not(.active){background:var(--border-soft);color:var(--text)}
 
 .phone{
-  width:380px;margin:0 auto;
-  background:#0a0a10;border-radius:44px;padding:12px;
-  box-shadow:0 30px 80px rgba(0,0,0,.25),0 0 0 2px rgba(255,255,255,.04);
-  position:relative
+  width:390px;margin:0 auto;
+  background:#0a0a10;border-radius:48px;padding:10px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);position:relative
 }
 .phone::before{
-  content:'';position:absolute;top:20px;left:50%;transform:translateX(-50%);
-  width:110px;height:28px;background:#0a0a10;border-radius:999px;z-index:10
+  content:'';position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  width:118px;height:30px;background:#0a0a10;border-radius:999px;z-index:10
 }
 .phone-screen{
-  background:var(--surface);border-radius:32px;overflow:hidden;
-  height:760px;overflow-y:auto;position:relative
+  background:#F2F4F6;border-radius:38px;overflow:hidden;
+  height:810px;overflow-y:auto;position:relative
 }
 .phone-screen::-webkit-scrollbar{width:0}
 
+/* 헤더 */
 .app-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:52px 20px 12px;font-size:17px;font-weight:700
+  padding:52px 20px 14px;background:#fff
 }
-.app-header .back,.app-header .star-ico{color:var(--text-2);font-size:20px;cursor:pointer}
+.app-h-btn{font-size:22px;color:var(--text-2);cursor:pointer;line-height:1;user-select:none}
+.app-h-title{font-size:16px;font-weight:700;color:var(--text)}
+.app-h-right{display:flex;gap:18px}
 
-.price-section{padding:16px 20px 20px;text-align:center}
-.coin-icon{
-  width:60px;height:60px;margin:0 auto 10px;color:#fff;font-size:28px;font-weight:800;
+/* 히어로 — 코인 + 가격 */
+.hero-coin{background:#fff;padding:8px 20px 22px}
+.hero-top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.hero-icon{
+  width:44px;height:44px;color:#fff;font-size:20px;font-weight:800;
   border-radius:50%;display:flex;align-items:center;justify-content:center
 }
-.coin-icon.eth{background:linear-gradient(135deg,#627EEA 0%,#8A92B2 100%)}
-.coin-icon.btc{background:linear-gradient(135deg,#F7931A 0%,#FFB75E 100%)}
-.coin-icon.trx{background:linear-gradient(135deg,#FF0013 0%,#FF6B6B 100%)}
-.coin-name-lg{font-size:15px;color:var(--text);font-weight:700}
-.coin-symbol-lg{font-size:12px;color:var(--primary);font-weight:700;margin-bottom:8px}
-.price{font-size:36px;font-weight:800;color:var(--text);letter-spacing:-0.03em;margin-bottom:6px;font-variant-numeric:tabular-nums}
-.price-change{font-size:13px;font-weight:600}
-.price-change .sep{color:var(--text-4);margin:0 6px}
-
-.signal-card{
-  margin:6px 16px 12px;padding:14px 16px;border-radius:14px;
-  display:flex;gap:12px;align-items:flex-start
+.hero-icon.eth{background:linear-gradient(135deg,#627EEA,#8A92B2)}
+.hero-icon.btc{background:linear-gradient(135deg,#F7931A,#FFB75E)}
+.hero-icon.trx{background:linear-gradient(135deg,#FF0013,#FF6B6B)}
+.hero-meta{display:flex;flex-direction:column}
+.hero-name{font-size:16px;color:var(--text);font-weight:700;line-height:1.2}
+.hero-symbol{font-size:12px;color:var(--text-3);font-weight:600;margin-top:2px}
+.hero-price{
+  font-size:38px;font-weight:800;color:var(--text);
+  letter-spacing:-0.04em;font-variant-numeric:tabular-nums;line-height:1;margin-bottom:8px
 }
-.signal-card.positive{background:var(--up-soft)}
-.signal-card.warning{background:var(--warn-soft)}
-.signal-card.danger{background:var(--down-soft)}
-.signal-card .signal-icon{font-size:22px;line-height:1.1}
-.signal-card .signal-body{flex:1}
-.signal-card .signal-title{font-weight:700;font-size:14px;color:var(--text);margin-bottom:3px;line-height:1.3}
-.signal-card .signal-sub{font-size:12px;color:var(--text-2);line-height:1.4}
+.hero-price .unit{font-size:20px;color:var(--text-2);font-weight:700;margin-left:4px}
+.hero-change{font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.hero-change.up{color:var(--up)}
+.hero-change.down{color:var(--down)}
+.hero-change .period{color:var(--text-3);font-weight:500;margin-left:2px}
 
-.app-section{padding:16px 20px;border-top:8px solid var(--bg)}
-.app-section:first-of-type{border-top:none}
-.section-label{font-size:11px;color:var(--text-3);font-weight:700;letter-spacing:.3px;margin-bottom:10px}
+/* 차트 */
+.chart-wrap{background:#fff;padding:8px 0 16px}
+.mini-chart{width:100%;height:180px;display:block}
+.chart-tabs{
+  display:flex;justify-content:space-between;
+  padding:12px 20px 0;gap:4px
+}
+.chart-tab{
+  background:transparent;border:none;padding:7px 10px;
+  font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;
+  color:var(--text-3);border-radius:8px;flex:1
+}
+.chart-tab.active{background:var(--border-soft);color:var(--text)}
 
-.sector-badge{display:inline-block;padding:4px 10px;background:var(--primary-soft);color:var(--primary);border-radius:999px;font-size:12px;font-weight:700;margin-bottom:8px}
-.sector-desc{font-size:14px;color:var(--text);line-height:1.45;margin-bottom:6px;font-weight:500}
-.sector-rank{font-size:13px;color:var(--text-2);font-weight:500}
-.sector-rank b{color:var(--primary);font-weight:700}
+/* 본문 카드 스택 */
+.app-content{padding:12px}
+.tcard{
+  background:#fff;border-radius:18px;
+  padding:22px 20px;margin-bottom:12px
+}
+.tcard-title{
+  font-size:17px;color:var(--text);font-weight:800;
+  letter-spacing:-0.02em;margin-bottom:14px
+}
 
-.moat-badge{display:inline-block;padding:5px 12px;border-radius:999px;font-size:12px;font-weight:700;margin-bottom:12px}
-.moat-badge.wide{background:var(--up);color:#fff}
-.moat-badge.narrow{background:var(--warn);color:#fff}
-.moat-badge.none{background:var(--border-soft);color:var(--text-3)}
-.moat-reason{display:flex;flex-direction:column;gap:10px}
-.moat-item{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--text);line-height:1.4}
-.moat-item .moat-icon{font-size:16px;width:20px;text-align:center}
-.moat-item b{font-weight:700}
-.moat-item .mi-desc{color:var(--text-2);font-size:12px;margin-top:2px}
+/* 요약 배너 (파란 카드) */
+.summary-banner{
+  background:linear-gradient(135deg,#3182F6,#5B9DFB);
+  color:#fff;border-radius:18px;padding:22px;margin-bottom:12px
+}
+.summary-banner .sb-emoji{font-size:30px;margin-bottom:12px;display:block}
+.summary-banner .sb-title{font-size:19px;font-weight:800;letter-spacing:-0.02em;line-height:1.35;margin-bottom:6px}
+.summary-banner .sb-sub{font-size:13px;opacity:.88;font-weight:500;line-height:1.5}
 
-.kpi-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.kpi{background:var(--surface-hover);padding:12px;border-radius:12px;border-left:3px solid var(--border)}
-.kpi.up{border-left-color:var(--up)}
-.kpi.down{border-left-color:var(--down)}
-.kpi.warn{border-left-color:var(--warn)}
-.kpi-label{font-size:11px;color:var(--text-3);font-weight:700;margin-bottom:4px}
-.kpi-value{font-size:17px;font-weight:800;color:var(--text);margin-bottom:2px;font-variant-numeric:tabular-nums;letter-spacing:-0.02em}
-.kpi-sub{font-size:11px;color:var(--text-2);font-weight:500}
+/* Q&A 리스트 */
+.qa-list{display:flex;flex-direction:column;gap:2px}
+.qa-item{
+  padding:16px 0;border-bottom:1px solid var(--border-soft)
+}
+.qa-item:last-child{border-bottom:none}
+.qa-item:first-child{padding-top:0}
+.qa-q{
+  font-size:14px;color:var(--text-2);font-weight:600;
+  margin-bottom:8px;display:flex;align-items:center;gap:8px
+}
+.qa-q .qa-emoji{font-size:16px}
+.qa-a{
+  font-size:18px;color:var(--text);font-weight:800;
+  letter-spacing:-0.02em;line-height:1.35
+}
+.qa-a.up{color:var(--up)}
+.qa-a.down{color:var(--down)}
+.qa-a.warn{color:var(--warn)}
+.qa-sub{font-size:13px;color:var(--text-3);margin-top:4px;font-weight:500;line-height:1.4}
 
-.risk-card{display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:12px}
-.risk-card.warn{background:var(--warn-soft)}
-.risk-card.danger{background:var(--down-soft)}
-.risk-card .risk-icon{font-size:18px;line-height:1.1}
-.risk-card .risk-text{font-size:13px;color:var(--text);line-height:1.4;flex:1;font-weight:500}
+/* 통계 3열 */
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat-cell{
+  background:var(--surface-hover);border-radius:14px;padding:14px 10px;text-align:center
+}
+.stat-cell .sc-emoji{font-size:24px;margin-bottom:8px;display:block}
+.stat-cell .sc-value{
+  font-size:15px;font-weight:800;color:var(--text);
+  letter-spacing:-0.02em;margin-bottom:4px;line-height:1.2
+}
+.stat-cell .sc-label{font-size:11px;color:var(--text-3);font-weight:600;line-height:1.3}
 
-.event-card{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--border-soft)}
-.event-card:last-child{border-bottom:none}
-.event-date{font-size:11px;color:var(--primary);font-weight:700;min-width:44px;text-align:center;background:var(--primary-soft);padding:6px 4px;border-radius:8px;line-height:1.1}
-.event-text{flex:1}
-.event-text b{font-size:14px;color:var(--text);display:block;margin-bottom:3px;font-weight:700}
-.event-text .sub{font-size:12px;color:var(--text-3);line-height:1.4}
+/* 이벤트 */
+.ev-list{display:flex;flex-direction:column;gap:0}
+.ev-item{
+  display:flex;gap:14px;align-items:flex-start;
+  padding:14px 0;border-bottom:1px solid var(--border-soft)
+}
+.ev-item:last-child{border-bottom:none}
+.ev-item:first-child{padding-top:0}
+.ev-ico{
+  font-size:20px;width:40px;height:40px;
+  background:var(--primary-soft);color:var(--primary);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0
+}
+.ev-body{flex:1;min-width:0}
+.ev-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
+.ev-sub{font-size:12px;color:var(--text-3);font-weight:500;line-height:1.4}
 
-.app-cta{display:flex;gap:8px;padding:14px 16px 24px;border-top:1px solid var(--border-soft)}
-.app-cta button{flex:1;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;letter-spacing:-0.01em}
+/* 비슷한 코인 */
+.related-row{display:flex;gap:10px;overflow-x:auto;margin:0 -4px}
+.related-chip{
+  flex-shrink:0;display:flex;align-items:center;gap:8px;
+  padding:10px 14px;background:var(--surface-hover);border-radius:12px;
+  font-size:13px;font-weight:700;color:var(--text)
+}
+.related-chip .rc-sym{color:var(--text-3);font-size:11px;font-weight:600}
+
+/* CTA */
+.app-cta{
+  display:flex;gap:8px;padding:14px 16px 24px;
+  background:#fff;border-top:1px solid var(--border-soft)
+}
+.app-cta button{flex:1;padding:16px;border-radius:14px;border:none;font-size:16px;font-weight:800;cursor:pointer;font-family:inherit;letter-spacing:-0.02em;transition:all .15s}
 .btn-primary{background:var(--primary);color:#fff}
 .btn-primary:hover{background:#2068d8}
 .btn-secondary{background:var(--surface-hover);color:var(--text-2)}
 
+/* 범례 */
 .mockup-legend{max-width:800px;margin:28px auto 0;padding:24px 28px;background:var(--surface);border-radius:16px;box-shadow:var(--shadow)}
 .mockup-legend h3{font-size:16px;color:var(--text);margin-bottom:14px;font-weight:800}
 .legend-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
@@ -1384,211 +1440,239 @@ function getVisible(){
   );
 }
 
+// 간단 SVG area chart
+function renderChart(points, color){
+  const w=350,h=180,pad=10;
+  const min=Math.min(...points),max=Math.max(...points);
+  const range=max-min||1;
+  const coords=points.map((v,i)=>({
+    x:pad+(i/(points.length-1))*(w-pad*2),
+    y:pad+(1-(v-min)/range)*(h-pad*2)
+  }));
+  const linePath='M '+coords.map(c=>c.x.toFixed(1)+' '+c.y.toFixed(1)).join(' L ');
+  const areaPath=linePath+' L '+coords[coords.length-1].x.toFixed(1)+' '+h+' L '+pad+' '+h+' Z';
+  const last=coords[coords.length-1];
+  const gid='g_'+Math.random().toString(36).slice(2,8);
+  return `<svg viewBox="0 0 ${w} ${h}" class="mini-chart" preserveAspectRatio="none">
+    <defs><linearGradient id="${gid}" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="${color}" stop-opacity="0.22"/>
+      <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${areaPath}" fill="url(#${gid})"/>
+    <path d="${linePath}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="8" fill="${color}" opacity="0.2"/>
+    <circle cx="${last.x.toFixed(1)}" cy="${last.y.toFixed(1)}" r="4" fill="${color}"/>
+  </svg>`;
+}
+
 function renderMockup(){
-  const mockups = {
-    ETH: {
-      cls:'eth', iconChar:'◆', name:'Ethereum', symbol:'ETH',
-      price:'$2,260.45', p30d:'+13.5%', p30dCls:'up', p1y:'-49.6%', p1yCls:'down',
-      signalType:'positive', signalIcon:'💡',
-      signalTitle:'SaaS로 치면 우량 기업 수준',
-      signalSub:'Rule of 40 = 47 (매출 성장 +28% + 영업이익률 19%)',
-      sector:'L1 플랫폼',
-      sectorDesc:'스마트 컨트랙트의 표준. 가장 많은 dApp이 돌아가는 플랫폼.',
-      sectorRank:'L1 중 수수료 수익 · TVL <b>1위</b>',
-      moat:'Wide', moatClass:'wide',
-      moat1Icon:'🔗', moat1Title:'전환비용', moat1Desc:'EVM 개발자·dApp 락인, 재구축 비용 막대',
-      moat2Icon:'🌐', moat2Title:'네트워크 효과', moat2Desc:'TVL $55B · dApp 4,200개',
-      kpis:[
-        {cls:'up', label:'📈 연 매출', val:'$22.3B', sub:'PSR 12.2x · 우량'},
-        {cls:'warn', label:'👥 일 활성 사용자', val:'450K', sub:'전월비 -8%'},
-        {cls:'up', label:'👨‍💻 개발자', val:'2,800', sub:'전체 1위 · +4% MoM'},
-        {cls:'up', label:'🔓 희석 리스크', val:'낮음', sub:'FDV/MC 1.00x · 소각 中'},
-        {cls:'up', label:'💧 유동성', val:'최상', sub:'기관급 · Bid-Ask 0.8bp'},
-        {cls:'up', label:'💰 실질 수익', val:'연 +2.5%', sub:'스테이킹 2.4% + 디플레'}
+  const mockups={
+    ETH:{
+      name:'이더리움', symbol:'ETH', icon:'E', iconCls:'eth',
+      price:'2,260', unit:'원(약 300만원)',
+      change:'+13.5%', changeCls:'up', period:'한 달',
+      chart:[1800,1820,1790,1850,1880,1860,1920,1950,1910,1980,2000,2050,2020,2080,2100,2070,2150,2180,2160,2200,2210,2180,2230,2250,2240,2260,2280,2250,2275,2260],
+      summary:{
+        emoji:'💡',
+        title:'요즘 돈 잘 벌고 있어요',
+        sub:'한 달 사이 이 네트워크가 번 돈이 30% 늘었어요. 만드는 사람도 더 열심히 일하는 중.'
+      },
+      qa:[
+        {emoji:'💰', q:'이 코인, 실제로 돈 벌어요?', a:'네, 1년에 약 30조원', aCls:'up', sub:'회사로 치면 대기업 매출이에요'},
+        {emoji:'🔓', q:'새로 풀릴 코인이 많아요?', a:'거의 없어요', aCls:'up', sub:'오히려 쓸 때마다 일부 소각돼요'},
+        {emoji:'🏦', q:'가만히 맡겨두면 이자 받아요?', a:'네, 1년에 2.5%', aCls:'up', sub:'은행 예금처럼 자동으로 쌓여요'}
       ],
-      risks:[
-        {cls:'warn', icon:'⚠️', text:'최근 30일 활성 사용자가 8% 감소 중 — 네트워크 사용량 모니터링 필요'}
+      stats:[
+        {emoji:'🌐', value:'매일 45만 명', label:'이 코인 쓰는 사람'},
+        {emoji:'💪', value:'튼튼함', label:'10년 넘은 네트워크'},
+        {emoji:'👨‍💻', value:'2,800명', label:'만드는 사람 (1위)'}
       ],
       events:[
-        {date:'05/15', title:'Pectra Phase 2 업그레이드', sub:'검증자 보상 구조 변경 · D-26'},
-        {date:'📰', title:'ETH ETF 순유입 +$42M (7일)', sub:'기관 관심 유지되는 중'}
+        {ico:'🗓️', title:'큰 업데이트 예정 (Pectra)', sub:'5월 15일 · 26일 남았어요'},
+        {ico:'📰', title:'미국 기관 투자자 관심 ↑', sub:'최근 일주일 약 600억원 유입'}
       ]
     },
-    BTC: {
-      cls:'btc', iconChar:'₿', name:'Bitcoin', symbol:'BTC',
-      price:'$70,700', p30d:'+6.6%', p30dCls:'up', p1y:'-9.7%', p1yCls:'down',
-      signalType:'positive', signalIcon:'💎',
-      signalTitle:'1년 넘게 안 팔고 들고 있는 사람이 68%예요',
-      signalSub:'장기 보유자가 압도적 다수 — 매도 압력 낮음',
-      sector:'가치저장 (디지털 금)',
-      sectorDesc:'송금·결제보다 "보유"가 목적. 희소성과 네트워크 안정이 가치의 원천.',
-      sectorRank:'시총 <b>전체 1위</b> · 해시파워 <b>1위</b>',
-      moat:'Wide', moatClass:'wide',
-      moat1Icon:'🏅', moat1Title:'무형자산', moat1Desc:'"디지털 금" 브랜드, ETF 승인된 유일 암호자산',
-      moat2Icon:'⚡', moat2Title:'네트워크 효과', moat2Desc:'해시파워 격차로 후발 진입 불가',
-      kpis:[
-        {cls:'up', label:'💎 장기 홀더', val:'74.2%', sub:'1y+ HODLer 68%'},
-        {cls:'up', label:'⚡ 해시레이트', val:'ATH 수준', sub:'네트워크 보안 최강'},
-        {cls:'up', label:'📊 MVRV', val:'1.80', sub:'과열 아님 (3.5 이상 과열)'},
-        {cls:'up', label:'🔓 희석 리스크', val:'없음', sub:'인플레 0.85% · 반감기 예정'},
-        {cls:'up', label:'💧 유동성', val:'최상', sub:'전 코인 중 1위'},
-        {cls:'up', label:'🏛️ ETF 보유', val:'$54B', sub:'시총 대비 3.9%'}
+    BTC:{
+      name:'비트코인', symbol:'BTC', icon:'₿', iconCls:'btc',
+      price:'70,700', unit:'원(약 9,500만원)',
+      change:'+6.6%', changeCls:'up', period:'한 달',
+      chart:[65000,63000,64500,66000,68000,67000,65500,69000,71000,70000,68500,72000,73000,71500,70500,72500,71000,68000,69500,71500,72000,70000,69000,71000,72500,71500,70000,71200,70800,70700],
+      summary:{
+        emoji:'💎',
+        title:'오래 들고 있는 사람이 대부분',
+        sub:'10명 중 7명이 1년 넘게 안 팔고 있어요. 급하게 팔릴 일이 적다는 뜻이에요.'
+      },
+      qa:[
+        {emoji:'🏆', q:'이 코인, 왜 가치 있어요?', a:'디지털 시대의 금', aCls:'up', sub:'전 세계 기관·국가도 사는 중이에요'},
+        {emoji:'🛡️', q:'안전한 편이에요?', a:'최고 수준', aCls:'up', sub:'전 세계에서 가장 안전한 네트워크'},
+        {emoji:'📉', q:'가격이 많이 떨어질 수 있어요?', a:'단기 변동성 있어요', aCls:'warn', sub:'장기적으로는 우상향 추세'}
       ],
-      risks:[],
+      stats:[
+        {emoji:'💎', value:'74%', label:'1년 넘게 안 판 사람'},
+        {emoji:'🏛️', value:'54조원', label:'미국 ETF 보유량'},
+        {emoji:'⚡', value:'최강', label:'네트워크 안정성'}
+      ],
       events:[
-        {date:'07/15', title:'다음 반감기 D-3년', sub:'공급 감소 예정 이벤트'},
-        {date:'📰', title:'BTC ETF 순유입 +$1.2B (7일)', sub:'기관 수요 지속'}
+        {ico:'🗓️', title:'다음 반감기 예정', sub:'3년 남음 · 공급 감소 이벤트'},
+        {ico:'📰', title:'ETF 자금 유입 지속 중', sub:'최근 7일 약 1.6조원 유입'}
       ]
     },
-    TRX: {
-      cls:'trx', iconChar:'T', name:'TRON', symbol:'TRX',
-      price:'$0.316', p30d:'+9.7%', p30dCls:'up', p1y:'+35.9%', p1yCls:'up',
-      signalType:'positive', signalIcon:'🚀',
-      signalTitle:'회사로 치면 성장도 빠르고 돈도 잘 벌어요',
-      signalSub:'Rule of 40 = 135 · 8분기 연속 매출 성장',
-      sector:'L1 플랫폼 (USDT 특화)',
-      sectorDesc:'USDT 송금의 70%가 돌아가는 네트워크. 저비용 고속 송금 전문.',
-      sectorRank:'L1 중 수수료 수익 <b>2위</b> · USDT 점유 <b>1위</b>',
-      moat:'Narrow', moatClass:'narrow',
-      moat1Icon:'🌐', moat1Title:'네트워크 효과', moat1Desc:'USDT 기본 결제망 자리잡음',
-      moat2Icon:'💸', moat2Title:'비용 우위', moat2Desc:'수수료 무료 송금 가능한 구조',
-      kpis:[
-        {cls:'up', label:'📈 연 매출', val:'$346M', sub:'PSR 87x · YoY +35%'},
-        {cls:'up', label:'👥 일 활성 사용자', val:'2.4M', sub:'L1 중 1위'},
-        {cls:'warn', label:'👨‍💻 개발자', val:'85', sub:'-2% MoM (작은 편)'},
-        {cls:'up', label:'🔓 희석 리스크', val:'낮음', sub:'FDV/MC 1.00x · 소각 中'},
-        {cls:'warn', label:'💧 유동성', val:'양호', sub:'Bid-Ask 3bp'},
-        {cls:'up', label:'💰 실질 수익', val:'연 +4.0%', sub:'스테이킹 4% · 인플레 0%'}
+    TRX:{
+      name:'트론', symbol:'TRX', icon:'T', iconCls:'trx',
+      price:'0.316', unit:'원(약 440원)',
+      change:'+9.7%', changeCls:'up', period:'한 달',
+      chart:[0.24,0.245,0.25,0.248,0.252,0.258,0.26,0.262,0.265,0.268,0.27,0.272,0.278,0.28,0.282,0.285,0.288,0.29,0.292,0.295,0.298,0.3,0.302,0.305,0.308,0.31,0.312,0.314,0.315,0.316],
+      summary:{
+        emoji:'📈',
+        title:'8달 연속 더 많이 벌고 있어요',
+        sub:'매달 수익이 꾸준히 늘고, 쓰는 사람도 크립토 중 1위예요.'
+      },
+      qa:[
+        {emoji:'❓', q:'이 코인은 뭐 하는 거예요?', a:'달러 송금 전용 네트워크', aCls:'', sub:'다른 사람에게 달러 코인(USDT)을 빠르고 싸게 보내요'},
+        {emoji:'💰', q:'돈 잘 벌어요?', a:'네, 1년에 약 4,700억원', aCls:'up', sub:'크립토 전체 수익 2위'},
+        {emoji:'🏦', q:'맡겨두면 이자 받아요?', a:'네, 연 4% 실제 이자', aCls:'up', sub:'인플레 빼고도 실제로 남는 이자'}
       ],
-      risks:[
-        {cls:'warn', icon:'⚠️', text:'Justin Sun 평판 리스크 · SEC 소송 진행 중'}
+      stats:[
+        {emoji:'🌐', value:'매일 240만 명', label:'크립토 중 1위'},
+        {emoji:'💵', value:'70%', label:'달러 송금 점유율'},
+        {emoji:'🔥', value:'꾸준히 소각', label:'새 코인 안 풀려요'}
       ],
       events:[
-        {date:'07/15', title:'Stellar Reset 업그레이드', sub:'네트워크 최적화 예정'}
+        {ico:'🗓️', title:'네트워크 업데이트', sub:'7월 15일 예정'},
+        {ico:'📰', title:'달러 송금량 사상 최고', sub:'매일 약 11조원이 오가는 중'}
       ]
     }
   };
-  const m = mockups[state.mockupCoin] || mockups.ETH;
-  const coin = COINS.find(c=>c.symbol===state.mockupCoin);
 
-  const view = document.getElementById('mockupView');
-  view.innerHTML = `
+  const m=mockups[state.mockupCoin]||mockups.ETH;
+  const chartColor=m.changeCls==='up'?'#00A378':'#F04452';
+  const view=document.getElementById('mockupView');
+
+  view.innerHTML=`
     <div class="mockup-intro">
       <h2>📱 ZKAP 코인 상세 화면 — 목업</h2>
-      <p>MVP 제안 (공통 2 + 섹터별 3 + 조건부 시그널)이 실제 앱에서 어떻게 보일지.</p>
+      <p>실제로 사용자가 볼 화면 예시. 주식·코인 몰라도 이해할 수 있는 워딩으로.</p>
       <div class="coin-picker">
-        ${['ETH','BTC','TRX'].map(s=>`<button class="${s===state.mockupCoin?'active':''}" data-coin="${s}">${s}</button>`).join('')}
+        ${['ETH','BTC','TRX'].map(s=>'<button class="'+(s===state.mockupCoin?'active':'')+'" data-coin="'+s+'">'+s+'</button>').join('')}
       </div>
     </div>
 
-    <div class="phone">
-      <div class="phone-screen">
-        <div class="app-header">
-          <span class="back">〈</span>
-          <span>상세</span>
-          <span class="star-ico">☆</span>
-        </div>
+    <div class="phone"><div class="phone-screen">
 
-        <div class="price-section">
-          <div class="coin-icon ${m.cls}">${m.iconChar}</div>
-          <div class="coin-name-lg">${m.name}</div>
-          <div class="coin-symbol-lg">${m.symbol}</div>
-          <div class="price">${m.price}</div>
-          <div class="price-change">
-            <span class="${m.p30dCls}">${m.p30d} (30일)</span>
-            <span class="sep">·</span>
-            <span class="${m.p1yCls}">${m.p1y} (1년)</span>
+      <div class="app-header">
+        <span class="app-h-btn">〈</span>
+        <span class="app-h-title">${m.name}</span>
+        <span class="app-h-right"><span class="app-h-btn">🔔</span><span class="app-h-btn">☆</span></span>
+      </div>
+
+      <div class="hero-coin">
+        <div class="hero-top">
+          <div class="hero-icon ${m.iconCls}">${m.icon}</div>
+          <div class="hero-meta">
+            <div class="hero-name">${m.name}</div>
+            <div class="hero-symbol">${m.symbol}</div>
           </div>
         </div>
+        <div class="hero-price">${m.price}<span class="unit">달러</span></div>
+        <div class="hero-change ${m.changeCls}">
+          <span>${m.changeCls==='up'?'▲':'▼'} ${m.change}</span>
+          <span class="period">· ${m.period}</span>
+        </div>
+      </div>
 
-        <div class="signal-card ${m.signalType}">
-          <div class="signal-icon">${m.signalIcon}</div>
-          <div class="signal-body">
-            <div class="signal-title">${m.signalTitle}</div>
-            <div class="signal-sub">${m.signalSub}</div>
-          </div>
+      <div class="chart-wrap">
+        ${renderChart(m.chart, chartColor)}
+        <div class="chart-tabs">
+          <button class="chart-tab">1일</button>
+          <button class="chart-tab">1주</button>
+          <button class="chart-tab active">1달</button>
+          <button class="chart-tab">3달</button>
+          <button class="chart-tab">1년</button>
+          <button class="chart-tab">전체</button>
+        </div>
+      </div>
+
+      <div class="app-content">
+
+        <div class="summary-banner">
+          <span class="sb-emoji">${m.summary.emoji}</span>
+          <div class="sb-title">${m.summary.title}</div>
+          <div class="sb-sub">${m.summary.sub}</div>
         </div>
 
-        <div class="app-section">
-          <div class="section-label">섹터 · 포지셔닝</div>
-          <div class="sector-badge">${m.sector}</div>
-          <div class="sector-desc">${m.sectorDesc}</div>
-          <div class="sector-rank">${m.sectorRank}</div>
-        </div>
-
-        <div class="app-section">
-          <div class="section-label">경제적 해자 (Moat)</div>
-          <div class="moat-badge ${m.moatClass}">${m.moat} Moat</div>
-          <div class="moat-reason">
-            <div class="moat-item">
-              <span class="moat-icon">${m.moat1Icon}</span>
-              <div><b>${m.moat1Title}</b><div class="mi-desc">${m.moat1Desc}</div></div>
-            </div>
-            <div class="moat-item">
-              <span class="moat-icon">${m.moat2Icon}</span>
-              <div><b>${m.moat2Title}</b><div class="mi-desc">${m.moat2Desc}</div></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="app-section">
-          <div class="section-label">핵심 지표</div>
-          <div class="kpi-grid">
-            ${m.kpis.map(k=>`
-              <div class="kpi ${k.cls}">
-                <div class="kpi-label">${k.label}</div>
-                <div class="kpi-value">${k.val}</div>
-                <div class="kpi-sub">${k.sub}</div>
+        <div class="tcard">
+          <div class="tcard-title">이런 거 궁금하지 않으셨어요?</div>
+          <div class="qa-list">
+            ${m.qa.map(q=>`
+              <div class="qa-item">
+                <div class="qa-q"><span class="qa-emoji">${q.emoji}</span>${q.q}</div>
+                <div class="qa-a ${q.aCls||''}">${q.a}</div>
+                <div class="qa-sub">${q.sub}</div>
               </div>
             `).join('')}
           </div>
         </div>
 
-        ${m.risks.length?`
-        <div class="app-section">
-          <div class="section-label">주의할 점</div>
-          ${m.risks.map(r=>`
-            <div class="risk-card ${r.cls}">
-              <div class="risk-icon">${r.icon}</div>
-              <div class="risk-text">${r.text}</div>
-            </div>
-          `).join('')}
-        </div>`:''}
-
-        <div class="app-section">
-          <div class="section-label">앞으로 · 촉매</div>
-          ${m.events.map(e=>`
-            <div class="event-card">
-              <div class="event-date">${e.date}</div>
-              <div class="event-text">
-                <b>${e.title}</b>
-                <div class="sub">${e.sub}</div>
+        <div class="tcard">
+          <div class="tcard-title">한눈에 보기</div>
+          <div class="stat-row">
+            ${m.stats.map(s=>`
+              <div class="stat-cell">
+                <span class="sc-emoji">${s.emoji}</span>
+                <div class="sc-value">${s.value}</div>
+                <div class="sc-label">${s.label}</div>
               </div>
-            </div>
-          `).join('')}
+            `).join('')}
+          </div>
         </div>
 
-        <div class="app-cta">
-          <button class="btn-secondary">알림 설정</button>
-          <button class="btn-primary">구매하기</button>
+        <div class="tcard">
+          <div class="tcard-title">앞으로 일정</div>
+          <div class="ev-list">
+            ${m.events.map(e=>`
+              <div class="ev-item">
+                <div class="ev-ico">${e.ico}</div>
+                <div class="ev-body">
+                  <div class="ev-title">${e.title}</div>
+                  <div class="ev-sub">${e.sub}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
         </div>
+
+        <div class="tcard">
+          <div class="tcard-title">비슷한 코인</div>
+          <div class="related-row">
+            <div class="related-chip">🟣 솔라나 <span class="rc-sym">SOL</span></div>
+            <div class="related-chip">🔴 트론 <span class="rc-sym">TRX</span></div>
+            <div class="related-chip">🟡 BNB <span class="rc-sym">BNB</span></div>
+            <div class="related-chip">🔵 체인링크 <span class="rc-sym">LINK</span></div>
+          </div>
+        </div>
+
       </div>
-    </div>
+
+      <div class="app-cta">
+        <button class="btn-secondary">🔔 알림 받기</button>
+        <button class="btn-primary">구매하기</button>
+      </div>
+
+    </div></div>
 
     <div class="mockup-legend">
-      <h3>이 화면의 설계 — 3인 관점 결합</h3>
+      <h3>화면 설계 — 토스 스타일 3원칙</h3>
       <div class="legend-grid">
-        <div class="lg-item"><b>① 시그널 카드</b><p>조건부 시그널 1개 (박종인 시그널 룰북). 임계치 충족 시 최상단 노출.</p></div>
-        <div class="lg-item"><b>② 섹터 · 포지셔닝</b><p>이진수님·한동근님 안의 공통 1번 섹션. "이게 뭐하는 코인?"</p></div>
-        <div class="lg-item"><b>③ 경제적 해자</b><p>한동근님 Moat 프레임. Wide/Narrow/None + 핵심 해자 2개.</p></div>
-        <div class="lg-item"><b>④ 핵심 지표 6개</b><p>박종인 MVP: 공통 2 (희석·유동성) + 섹터별 3~4 (섹터 따라 구성).</p></div>
-        <div class="lg-item"><b>⑤ 주의할 점</b><p>이진수님 리스크 섹션. 희석·운영 신뢰·경쟁 리스크 등.</p></div>
-        <div class="lg-item"><b>⑥ 앞으로</b><p>이진수님·한동근님의 촉매·뉴스. 다가올 이벤트 카드.</p></div>
+        <div class="lg-item"><b>1. 질문형 카드</b><p>PSR·MVRV 같은 용어 대신 "실제로 돈 벌어요?" 같은 질문 → 바로 답.</p></div>
+        <div class="lg-item"><b>2. 비유와 맥락</b><p>"회사로 치면 대기업 매출", "은행 예금처럼" 같은 일상 비유.</p></div>
+        <div class="lg-item"><b>3. 숫자 + 원화 병기</b><p>달러 가격 옆에 원화 추정치. 체감 가능한 단위로.</p></div>
+        <div class="lg-item"><b>요약 배너</b><p>5가지 축의 가장 중요한 신호 하나만 최상단. 나머지는 카드로 깊이 있게.</p></div>
+        <div class="lg-item"><b>차트 · 상세</b><p>1일~전체 기간 선택. 앱 코인 상세의 기본. 누구나 보는 것.</p></div>
+        <div class="lg-item"><b>앞으로 일정</b><p>언락·업그레이드·뉴스를 타임라인으로. "언제 뭐가 있을지" 직관적.</p></div>
       </div>
     </div>
   `;
 
-  // 코인 선택 버튼
   view.querySelectorAll('[data-coin]').forEach(b=>{
     b.onclick=()=>{state.mockupCoin=b.dataset.coin;renderMockup();};
   });
