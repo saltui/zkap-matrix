@@ -459,8 +459,60 @@ a.src-card:hover::after{opacity:1;color:var(--primary)}
 .ev-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px}
 .ev-sub{font-size:12px;color:var(--text-3);font-weight:500;line-height:1.4}
 
+/* 시세 요약 2x2 */
+.price-stats{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px}
+.ps-cell{display:flex;flex-direction:column;gap:4px}
+.ps-label{font-size:12px;color:var(--text-3);font-weight:600}
+.ps-value{font-size:15px;color:var(--text);font-weight:700;font-variant-numeric:tabular-nums;letter-spacing:-0.01em}
+
+/* 기간별 수익률 */
+.period-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.period-cell{
+  background:var(--surface-hover);border-radius:12px;
+  padding:14px 8px;text-align:center
+}
+.period-cell .pc-label{font-size:11px;color:var(--text-3);font-weight:600;margin-bottom:4px}
+.period-cell .pc-value{font-size:14px;font-weight:800;letter-spacing:-0.01em;font-variant-numeric:tabular-nums}
+.period-cell .pc-value.up{color:var(--up)}
+.period-cell .pc-value.down{color:var(--down)}
+
+/* 뉴스 */
+.news-list{display:flex;flex-direction:column}
+.news-item{
+  padding:14px 0;border-bottom:1px solid var(--border-soft);
+  display:flex;gap:12px;align-items:flex-start;cursor:pointer
+}
+.news-item:last-child{border-bottom:none}
+.news-item:first-child{padding-top:0}
+.news-dot{
+  font-size:14px;width:28px;height:28px;flex-shrink:0;
+  background:var(--primary-soft);color:var(--primary);
+  border-radius:8px;display:flex;align-items:center;justify-content:center
+}
+.news-body{flex:1;min-width:0}
+.news-title{font-size:14px;font-weight:700;color:var(--text);line-height:1.35;margin-bottom:4px}
+.news-meta{font-size:11px;color:var(--text-3);font-weight:500}
+
+/* 보유자 카드 */
+.holder-card{
+  background:linear-gradient(135deg,#F2F4F6,#E8F3FF);
+  border-radius:16px;padding:18px;display:flex;gap:14px;align-items:center
+}
+.holder-ico{
+  font-size:28px;width:52px;height:52px;
+  background:#fff;border-radius:14px;
+  display:flex;align-items:center;justify-content:center
+}
+.holder-body{flex:1}
+.holder-main{
+  font-size:17px;font-weight:800;color:var(--text);
+  letter-spacing:-0.02em;margin-bottom:3px
+}
+.holder-main .trend{color:var(--up);font-size:13px;font-weight:700;margin-left:4px}
+.holder-sub{font-size:12px;color:var(--text-2);font-weight:500}
+
 /* 비슷한 코인 */
-.related-row{display:flex;gap:10px;overflow-x:auto;margin:0 -4px}
+.related-row{display:flex;gap:10px;overflow-x:auto;margin:0 -4px;padding:0 4px}
 .related-chip{
   flex-shrink:0;display:flex;align-items:center;gap:8px;
   padding:10px 14px;background:var(--surface-hover);border-radius:12px;
@@ -1472,6 +1524,18 @@ function renderMockup(){
       price:'2,260', unit:'원(약 300만원)',
       change:'+13.5%', changeCls:'up', period:'한 달',
       chart:[1800,1820,1790,1850,1880,1860,1920,1950,1910,1980,2000,2050,2020,2080,2100,2070,2150,2180,2160,2200,2210,2180,2230,2250,2240,2260,2280,2250,2275,2260],
+      priceStats:[
+        {label:'시가총액', value:'272조원'},
+        {label:'24h 거래량', value:'27조원'},
+        {label:'24h 최고', value:'$2,285'},
+        {label:'24h 최저', value:'$2,220'}
+      ],
+      periods:[
+        {label:'1일', value:'+0.8%', cls:'up'},
+        {label:'1주', value:'+5.2%', cls:'up'},
+        {label:'1달', value:'+13.5%', cls:'up'},
+        {label:'1년', value:'-49.6%', cls:'down'}
+      ],
       summary:{
         emoji:'💡',
         title:'요즘 돈 잘 벌고 있어요',
@@ -1480,7 +1544,8 @@ function renderMockup(){
       qa:[
         {emoji:'💰', q:'이 코인, 실제로 돈 벌어요?', a:'네, 1년에 약 30조원', aCls:'up', sub:'회사로 치면 대기업 매출이에요'},
         {emoji:'🔓', q:'새로 풀릴 코인이 많아요?', a:'거의 없어요', aCls:'up', sub:'오히려 쓸 때마다 일부 소각돼요'},
-        {emoji:'🏦', q:'가만히 맡겨두면 이자 받아요?', a:'네, 1년에 2.5%', aCls:'up', sub:'은행 예금처럼 자동으로 쌓여요'}
+        {emoji:'🏦', q:'가만히 맡겨두면 이자 받아요?', a:'네, 1년에 2.5%', aCls:'up', sub:'은행 예금처럼 자동으로 쌓여요'},
+        {emoji:'📊', q:'지금 가격이 비싼 편이에요?', a:'적정한 수준', aCls:'', sub:'주식으로 치면 PER 적정권에 해당해요'}
       ],
       stats:[
         {emoji:'🌐', value:'매일 45만 명', label:'이 코인 쓰는 사람'},
@@ -1490,13 +1555,34 @@ function renderMockup(){
       events:[
         {ico:'🗓️', title:'큰 업데이트 예정 (Pectra)', sub:'5월 15일 · 26일 남았어요'},
         {ico:'📰', title:'미국 기관 투자자 관심 ↑', sub:'최근 일주일 약 600억원 유입'}
-      ]
+      ],
+      news:[
+        {emoji:'📢', title:'이더리움 재단, 5월 대규모 업그레이드 예정', time:'2시간 전'},
+        {emoji:'📈', title:'미국 현물 ETF 주간 유입액 역대 최대', time:'하루 전'},
+        {emoji:'🔧', title:'비탈릭, 수수료 구조 개선 제안서 공개', time:'3일 전'}
+      ],
+      holder:{
+        emoji:'👥', main:'8.2만 명', trend:'+12%',
+        sub:'ZKAP에서 이 코인을 갖고 있어요 · 평균 1인당 약 180만원'
+      }
     },
     BTC:{
       name:'비트코인', symbol:'BTC', icon:'₿', iconCls:'btc',
       price:'70,700', unit:'원(약 9,500만원)',
       change:'+6.6%', changeCls:'up', period:'한 달',
       chart:[65000,63000,64500,66000,68000,67000,65500,69000,71000,70000,68500,72000,73000,71500,70500,72500,71000,68000,69500,71500,72000,70000,69000,71000,72500,71500,70000,71200,70800,70700],
+      priceStats:[
+        {label:'시가총액', value:'1,880조원'},
+        {label:'24h 거래량', value:'73조원'},
+        {label:'24h 최고', value:'$71,500'},
+        {label:'24h 최저', value:'$69,800'}
+      ],
+      periods:[
+        {label:'1일', value:'+1.2%', cls:'up'},
+        {label:'1주', value:'+3.5%', cls:'up'},
+        {label:'1달', value:'+6.6%', cls:'up'},
+        {label:'1년', value:'-9.7%', cls:'down'}
+      ],
       summary:{
         emoji:'💎',
         title:'오래 들고 있는 사람이 대부분',
@@ -1505,7 +1591,8 @@ function renderMockup(){
       qa:[
         {emoji:'🏆', q:'이 코인, 왜 가치 있어요?', a:'디지털 시대의 금', aCls:'up', sub:'전 세계 기관·국가도 사는 중이에요'},
         {emoji:'🛡️', q:'안전한 편이에요?', a:'최고 수준', aCls:'up', sub:'전 세계에서 가장 안전한 네트워크'},
-        {emoji:'📉', q:'가격이 많이 떨어질 수 있어요?', a:'단기 변동성 있어요', aCls:'warn', sub:'장기적으로는 우상향 추세'}
+        {emoji:'📉', q:'가격이 많이 떨어질 수 있어요?', a:'단기 변동성 있어요', aCls:'warn', sub:'장기적으로는 우상향 추세'},
+        {emoji:'🏛️', q:'기관도 많이 사요?', a:'미국 ETF에만 54조원', aCls:'up', sub:'블랙록·피델리티 등 대형사 보유'}
       ],
       stats:[
         {emoji:'💎', value:'74%', label:'1년 넘게 안 판 사람'},
@@ -1515,13 +1602,34 @@ function renderMockup(){
       events:[
         {ico:'🗓️', title:'다음 반감기 예정', sub:'3년 남음 · 공급 감소 이벤트'},
         {ico:'📰', title:'ETF 자금 유입 지속 중', sub:'최근 7일 약 1.6조원 유입'}
-      ]
+      ],
+      news:[
+        {emoji:'📢', title:'블랙록 BTC ETF, 또 사상 최대 유입', time:'1시간 전'},
+        {emoji:'🏦', title:'미국 대형 은행, 비트코인 커스터디 서비스 확대', time:'어제'},
+        {emoji:'🌍', title:'엘살바도르, BTC 보유량 6,000 BTC 돌파', time:'3일 전'}
+      ],
+      holder:{
+        emoji:'👥', main:'12.8만 명', trend:'+8%',
+        sub:'ZKAP에서 이 코인을 갖고 있어요 · 평균 1인당 약 420만원'
+      }
     },
     TRX:{
       name:'트론', symbol:'TRX', icon:'T', iconCls:'trx',
       price:'0.316', unit:'원(약 440원)',
       change:'+9.7%', changeCls:'up', period:'한 달',
       chart:[0.24,0.245,0.25,0.248,0.252,0.258,0.26,0.262,0.265,0.268,0.27,0.272,0.278,0.28,0.282,0.285,0.288,0.29,0.292,0.295,0.298,0.3,0.302,0.305,0.308,0.31,0.312,0.314,0.315,0.316],
+      priceStats:[
+        {label:'시가총액', value:'41조원'},
+        {label:'24h 거래량', value:'6,800억원'},
+        {label:'24h 최고', value:'$0.318'},
+        {label:'24h 최저', value:'$0.313'}
+      ],
+      periods:[
+        {label:'1일', value:'+0.5%', cls:'up'},
+        {label:'1주', value:'+3.8%', cls:'up'},
+        {label:'1달', value:'+9.7%', cls:'up'},
+        {label:'1년', value:'+35.9%', cls:'up'}
+      ],
       summary:{
         emoji:'📈',
         title:'8달 연속 더 많이 벌고 있어요',
@@ -1530,7 +1638,8 @@ function renderMockup(){
       qa:[
         {emoji:'❓', q:'이 코인은 뭐 하는 거예요?', a:'달러 송금 전용 네트워크', aCls:'', sub:'다른 사람에게 달러 코인(USDT)을 빠르고 싸게 보내요'},
         {emoji:'💰', q:'돈 잘 벌어요?', a:'네, 1년에 약 4,700억원', aCls:'up', sub:'크립토 전체 수익 2위'},
-        {emoji:'🏦', q:'맡겨두면 이자 받아요?', a:'네, 연 4% 실제 이자', aCls:'up', sub:'인플레 빼고도 실제로 남는 이자'}
+        {emoji:'🏦', q:'맡겨두면 이자 받아요?', a:'네, 연 4% 실제 이자', aCls:'up', sub:'인플레 빼고도 실제로 남는 이자'},
+        {emoji:'⚠️', q:'주의할 점은 없어요?', a:'창업자 관련 리스크', aCls:'warn', sub:'미국 증권위가 소송 진행 중 (가격에 영향 있을 수 있음)'}
       ],
       stats:[
         {emoji:'🌐', value:'매일 240만 명', label:'크립토 중 1위'},
@@ -1540,7 +1649,16 @@ function renderMockup(){
       events:[
         {ico:'🗓️', title:'네트워크 업데이트', sub:'7월 15일 예정'},
         {ico:'📰', title:'달러 송금량 사상 최고', sub:'매일 약 11조원이 오가는 중'}
-      ]
+      ],
+      news:[
+        {emoji:'💵', title:'트론 USDT 발행량 700억 달러 돌파', time:'3시간 전'},
+        {emoji:'📊', title:'동남아 송금 시장 점유율 1위 유지', time:'어제'},
+        {emoji:'⚖️', title:'SEC 소송 심리 연기 가능성 보도', time:'1주 전'}
+      ],
+      holder:{
+        emoji:'👥', main:'4.5만 명', trend:'+22%',
+        sub:'ZKAP에서 이 코인을 갖고 있어요 · 평균 1인당 약 85만원'
+      }
     }
   };
 
@@ -1594,6 +1712,19 @@ function renderMockup(){
 
       <div class="app-content">
 
+        <div class="tcard">
+          <div class="price-stats">
+            ${m.priceStats.map(p=>`<div class="ps-cell"><span class="ps-label">${p.label}</span><span class="ps-value">${p.value}</span></div>`).join('')}
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="tcard-title">기간별 수익률</div>
+          <div class="period-row">
+            ${m.periods.map(p=>`<div class="period-cell"><div class="pc-label">${p.label}</div><div class="pc-value ${p.cls}">${p.value}</div></div>`).join('')}
+          </div>
+        </div>
+
         <div class="summary-banner">
           <span class="sb-emoji">${m.summary.emoji}</span>
           <div class="sb-title">${m.summary.title}</div>
@@ -1621,6 +1752,31 @@ function renderMockup(){
                 <span class="sc-emoji">${s.emoji}</span>
                 <div class="sc-value">${s.value}</div>
                 <div class="sc-label">${s.label}</div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="holder-card">
+            <div class="holder-ico">${m.holder.emoji}</div>
+            <div class="holder-body">
+              <div class="holder-main">${m.holder.main}<span class="trend">▲ ${m.holder.trend}</span></div>
+              <div class="holder-sub">${m.holder.sub}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tcard">
+          <div class="tcard-title">최근 소식</div>
+          <div class="news-list">
+            ${m.news.map(n=>`
+              <div class="news-item">
+                <div class="news-dot">${n.emoji}</div>
+                <div class="news-body">
+                  <div class="news-title">${n.title}</div>
+                  <div class="news-meta">${n.time}</div>
+                </div>
               </div>
             `).join('')}
           </div>
