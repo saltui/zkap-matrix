@@ -1575,20 +1575,27 @@ function render(){
   const tab = TABS.find(t=>t.key===state.tab);
 
   // 목업 탭 처리
+  const $tw = document.querySelector('.tw');
+  const $meta = document.querySelector('.meta-row');
+  const $macro = document.querySelector('.macro-banner');
+  const $filter = document.querySelector('.filter-bar');
+  const $mockup = document.getElementById('mockupView');
+  const setDisp = (el, val) => { if (el) el.style.display = val; };
+
   if(state.tab==='mockup'){
-    document.querySelector('.tw').style.display='none';
-    document.querySelector('.meta-row').style.display='none';
-    document.querySelector('.macro-banner').style.display='none';
-    document.querySelector('.filter-bar').style.display='none';
-    document.getElementById('mockupView').style.display='block';
+    setDisp($tw, 'none');
+    setDisp($meta, 'none');
+    setDisp($macro, 'none');
+    setDisp($filter, 'none');
+    setDisp($mockup, 'block');
     renderMockup();
     return;
   }
-  document.querySelector('.tw').style.display='block';
-  document.querySelector('.meta-row').style.display='flex';
-  document.querySelector('.macro-banner').style.display='grid';
-  document.querySelector('.filter-bar').style.display='flex';
-  document.getElementById('mockupView').style.display='none';
+  setDisp($tw, 'block');
+  setDisp($meta, 'flex');
+  setDisp($macro, 'grid');
+  setDisp($filter, 'flex');
+  setDisp($mockup, 'none');
 
   const visible = getVisible();
 
